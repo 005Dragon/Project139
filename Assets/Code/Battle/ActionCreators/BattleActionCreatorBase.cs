@@ -1,11 +1,11 @@
-﻿using Code.BattleActions;
+﻿using Code.Battle.Actions;
 using UnityEngine;
 
-namespace Code.BattleActionCreators
+namespace Code.Battle.ActionCreators
 {
     public abstract class BattleActionCreatorBase : MonoBehaviour, IBattleActionCreator
     {
-        public PlayerId Player { get; set; }
+        public PlayerSide PlayerSide { get; set; }
 
         public BattleActionType ActionType => _actionType;
         

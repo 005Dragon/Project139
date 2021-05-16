@@ -1,22 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.Battle;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code
 {
     public class GunController : MonoBehaviour
     {
-        public class ShotFinishedEventArgs : EventArgs
-        {
-            public ShotModel Shot { get; }
-
-            public ShotFinishedEventArgs(ShotModel shot)
-            {
-                Shot = shot;
-            }
-        }
-        
-        public event EventHandler<ShotFinishedEventArgs> ShotFinished;
+        public event EventHandler<EventArgs<ShotModel>> ShotFinished;
         
         public GameObject BeamTemplate;
 
@@ -35,7 +27,7 @@ namespace Code
         private int _countShotsInProgress;
         private readonly Queue<ShotModel> _shotQueue = new Queue<ShotModel>();
         
-        public void SimpleShot(Transform target, bool hit, float damage)
+        public void SimpleShot(IBattleZoneField target, float damage)
         {
             const int shotsCount = 3;
             
@@ -43,7 +35,7 @@ namespace Code
             {
                 var shotModel = new ShotModel(target, 2.0f, ShotModel.SpeedType.Fast, damage / shotsCount)
                 {
-                    Explosion = hit,
+                    Explosion = target.TryGetShip(out _),
                     ExplosionScale = 1 + 0.2f * i
                 };
                 
@@ -51,11 +43,11 @@ namespace Code
             }
         }
 
-        public void DirectionShot(Transform target, bool hit, float damage)
+        public void DirectionShot(IBattleZoneField target, float damage)
         {
             var shotModel = new ShotModel(target, 6.0f, ShotModel.SpeedType.Slow, damage)
             {
-                Explosion = hit,
+                Explosion = target.TryGetShip(out _),
                 ExplosionScale = 2.0f
             };
 
@@ -83,7 +75,7 @@ namespace Code
             {
                 if (!_currentShot.TargetLocked)
                 {
-                    _currentShot.TargetLocked = RotateToTarget(_currentShot.Target);
+                    _currentShot.TargetLocked = RotateToTarget(((BattleZoneField)_currentShot.Target).Transform);
                 }
                 else if (!_currentShot.Charged && !_currentShot.Charging)
                 {
@@ -139,7 +131,7 @@ namespace Code
 
             beamController.Finished -= OnBeamControllerFinished;
             
-            ShotFinished?.Invoke(this, new ShotFinishedEventArgs(beamController.ShotModel));
+            ShotFinished?.Invoke(this, new EventArgs<ShotModel>(beamController.ShotModel));
 
             _countShotsInProgress--;
         }

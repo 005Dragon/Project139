@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Code.BattleActionCreators;
+using Code.Battle;
+using Code.Battle.ActionCreators;
 using Code.Utils;
 using UnityEngine;
 
@@ -68,16 +69,16 @@ namespace Code.UI
             {
                 return;
             }
+
+            IEnumerable<BattleZoneField> battleZoneFields =
+                ReferenceItems.BattleZoneDescription.GetBattleZoneFields().Select(x => (BattleZoneField) x);
             
-            IEnumerable<PlayerBattleZoneDescription> playerBattleZoneDescriptions =
-                ReferenceItems.BattleZoneDescription.GetPlayerBattleZoneDescriptions();
-            
-            foreach (PlayerBattleZoneDescription playerBattleZoneDescription in playerBattleZoneDescriptions)
+            foreach (BattleZoneField battleZoneField in battleZoneFields)
             {
-                Vector2 position = playerBattleZoneDescription.BattleZone.position;
+                Vector2 position = battleZoneField.Transform.position;
                 
                 GameObject glowGameObject = Instantiate(
-                    playerBattleZoneDescription.PlayerId == ReferenceItems.BattleSettings.ManagedPlayer
+                    battleZoneField.PlayerSide == ReferenceItems.BattleSettings.ManagedPlayer
                         ? _selfTargetGlowTemplate
                         : _enemyTargetGlowTemplate, 
                     position,
@@ -86,7 +87,7 @@ namespace Code.UI
                 );
                 
                 TargetGlowController glowController = glowGameObject.GetComponent<TargetGlowController>();
-                glowController.PlayerBattleZoneDescription = playerBattleZoneDescription;
+                glowController.BattleZoneField = battleZoneField;
                 glowController.Selected += OnApply;
                 glowController.Initialize();
                 
@@ -96,13 +97,14 @@ namespace Code.UI
 
         private void UpdateVisibleGlows()
         {
-            List<Transform> enableTargets = _targetBattleActionCreator.GetEnableTargets(ReferenceItems.BattleZoneDescription).ToList();
+            List<IBattleZoneField> enableTargets =
+                _targetBattleActionCreator.GetEnableTargets(ReferenceItems.BattleZoneDescription).ToList();
 
             foreach (TargetGlowController targetGlowController in _targetGlowControllers)
             {
-                Transform battleZone = targetGlowController.PlayerBattleZoneDescription.BattleZone;
+                BattleZoneField battleZoneField = targetGlowController.BattleZoneField;
 
-                if (enableTargets.Exists(x => x == battleZone))
+                if (enableTargets.Exists(battleZoneField.Equals))
                 {
                     targetGlowController.Show();
                 }
@@ -115,9 +117,9 @@ namespace Code.UI
         
         private void OnApply(object sender, EventArgs args)
         {
-            PlayerBattleZoneDescription playerBattleZoneDescription = ((TargetGlowController) sender).PlayerBattleZoneDescription;
+            BattleZoneField battleZoneField = ((TargetGlowController) sender).BattleZoneField;
             
-            _targetBattleActionCreator.SetTargets(playerBattleZoneDescription.BattleZone.ToSingleElementEnumerable());
+            _targetBattleActionCreator.SetTargets(battleZoneField.ToSingleElementEnumerable());
 
             Apply?.Invoke(this, new ApplyEventArgs(_targetBattleActionCreator));
         }

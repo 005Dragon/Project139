@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Battle;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code
 {
-    public class BattleZoneDescription : MonoBehaviour
+    public class BattleZoneDescription : MonoBehaviour, IBattleZone
     {
         [Serializable]
         private class PlayerBattleZones
         {
-            public PlayerId PlayerId;
+            public PlayerSide playerSide;
 
             public Transform[] BattleZones;
         }
@@ -18,15 +20,13 @@ namespace Code
         [SerializeField]
         private PlayerBattleZones[] _playerBattleZones;
 
-        public IEnumerable<PlayerBattleZoneDescription> GetPlayerBattleZoneDescriptions()
+        public IEnumerable<IBattleZoneField> GetBattleZoneFields()
         {
-            foreach (PlayerBattleZones playerBattleZones in _playerBattleZones)
+            foreach (PlayerBattleZones playerBattleZone in _playerBattleZones)
             {
-                PlayerId playerId = playerBattleZones.PlayerId;
-
-                foreach (Transform battleZone in playerBattleZones.BattleZones)
+                for (int i = 0; i < playerBattleZone.BattleZones.Length; i++)
                 {
-                    yield return new PlayerBattleZoneDescription {PlayerId = playerId, BattleZone = battleZone};
+                    yield return new BattleZoneField(playerBattleZone.playerSide, i, playerBattleZone.BattleZones[i]);
                 }
             }
         }
@@ -52,73 +52,65 @@ namespace Code
             return battleZones[minRangeZoneId];
         }
 
-        public bool TryGetBattleZoneByDirection(Transform currentBattleZone, Direction4 direction, out Transform resultBattleZone)
+        public bool TryGetRelativeBattleZoneFieldByDirection(PlayerSide playerSide, Direction4 direction, out IBattleZoneField resultField)
         {
-            resultBattleZone = default;
+            IBattleZoneField currentField = GetShipBattleZoneField(playerSide);
             
-            foreach (PlayerBattleZones playerBattleZone in _playerBattleZones)
+            resultField = default;
+
+            if (direction == Direction4.Left || direction == Direction4.Right)
             {
-                for (int i = 0; i < playerBattleZone.BattleZones.Length; i++)
+                if (direction == Direction4.Left && currentField.PlayerSide == PlayerSide.Left)
                 {
-                    if (currentBattleZone == playerBattleZone.BattleZones[i])
-                    {
-                        if (direction == Direction4.Up || direction == Direction4.Down)
-                        {
-                            int targetZoneIndex = direction == Direction4.Up ? i - 1 : i + 1;
+                    return false;    
+                }
 
-                            if (targetZoneIndex < 0 || targetZoneIndex >= playerBattleZone.BattleZones.Length)
-                            {
-                                return false;
-                            }
+                if (direction == Direction4.Right && currentField.PlayerSide == PlayerSide.Right)
+                {
+                    return false;
+                }
 
-                            resultBattleZone = playerBattleZone.BattleZones[targetZoneIndex];
+                resultField = GetBattleZoneFields()
+                    .First(x => x.Index == currentField.Index && x.PlayerSide == currentField.PlayerSide.GetAnother());
 
-                            return true;
-                        }
-                        else
-                        {
-                            if (direction == Direction4.Right && playerBattleZone.PlayerId == PlayerId.Right)
-                            {
-                                return false;
-                            }
+                return true;
+            }
 
-                            if (direction == Direction4.Left && playerBattleZone.PlayerId == PlayerId.Left)
-                            {
-                                return false;
-                            }
+            if (direction == Direction4.Up || direction == Direction4.Down)
+            {
+                if (direction == Direction4.Up && currentField.Index == 0)
+                {
+                    return false;
+                }
 
-                            PlayerBattleZones otherPlayerBattleZones =
-                                _playerBattleZones.First(x => x.PlayerId != playerBattleZone.PlayerId);
-                            
-                            if (i >= playerBattleZone.BattleZones.Length)
-                            {
-                                return false;
-                            }
+                IBattleZoneField[] fields = GetBattleZoneFields().Where(x => x.PlayerSide == currentField.PlayerSide).ToArray();
 
-                            resultBattleZone = otherPlayerBattleZones.BattleZones[i];
+                if (direction == Direction4.Down && currentField.Index == fields.Length - 1)
+                {
+                    return false;
+                }
 
-                            return true;
-                        }
-                    }
+                if (direction == Direction4.Up)
+                {
+                    resultField = fields.First(x => x.Index == currentField.Index - 1);
+
+                    return true;
+                }
+
+                if (direction == Direction4.Down)
+                {
+                    resultField = fields.First(x => x.Index == currentField.Index + 1);
+
+                    return true;
                 }
             }
 
             return false;
         }
 
-        public Transform GetShipBattleZone(PlayerId player)
+        public IBattleZoneField GetShipBattleZoneField(PlayerSide playerSide)
         {
-            PlayerBattleZones playerBattleZones = _playerBattleZones.First(x => x.PlayerId == player);
-
-            foreach (Transform battleZone in playerBattleZones.BattleZones)
-            {
-                if (battleZone.childCount > 0)
-                {
-                    return battleZone;
-                }
-            }
-
-            throw new Exception("Ship battle zone not found.");
+            return GetBattleZoneFields().Where(x => x.PlayerSide == playerSide).First(x => x.TryGetShip(out _));
         }
     }
 }

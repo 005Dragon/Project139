@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Code.BattleActions;
+using Code.Battle.Actions;
 using Code.Utils;
 
 namespace Code.UI.BattleController
@@ -21,7 +21,7 @@ namespace Code.UI.BattleController
             _uis.Add(_battleActionLineUiController);
         }
 
-        private void OnOnBattleActionLineUiControllerPlayerReady(object sender, EventArgs<PlayerId> eventArgs)
+        private void OnOnBattleActionLineUiControllerPlayerReady(object sender, EventArgs<PlayerSide> eventArgs)
         {
             Ready(eventArgs.Value);
         }
@@ -45,7 +45,7 @@ namespace Code.UI.BattleController
         {
             BattleAction battleAction = eventArgs.Value;
 
-            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.Player == battleAction.Player);
+            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == battleAction.PlayerSide);
             shipController.SetEnergy(shipController.Energy + battleAction.EnergyCost);
         }
     }

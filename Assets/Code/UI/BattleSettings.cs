@@ -10,20 +10,20 @@ namespace Code.UI
         [Serializable]
         public class PlayerSettings
         {
-            public PlayerId PlayerId;
+            public PlayerSide playerSide;
 
             public PlayerManagementType PlayerManagementType;
         }
 
         public PlayerSettings[] PlayersSettings =
         {
-            new PlayerSettings {PlayerId = PlayerId.Left}, 
-            new PlayerSettings {PlayerId = PlayerId.Right}
+            new PlayerSettings {playerSide = PlayerSide.Left}, 
+            new PlayerSettings {playerSide = PlayerSide.Right}
         };
 
         public List<GameObject> BattleActionTemplates;
 
-        public PlayerId? ManagedPlayer =>
-            PlayersSettings.FirstOrDefault(x => x.PlayerManagementType == PlayerManagementType.Manual)?.PlayerId;
+        public PlayerSide? ManagedPlayer =>
+            PlayersSettings.FirstOrDefault(x => x.PlayerManagementType == PlayerManagementType.Manual)?.playerSide;
     }
 }

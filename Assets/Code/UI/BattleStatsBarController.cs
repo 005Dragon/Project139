@@ -5,7 +5,7 @@ namespace Code.UI
 {
     public class BattleStatsBarController : MonoBehaviour
     {
-        public PlayerId Player;
+        public PlayerSide PlayerSide;
 
         [SerializeField] 
         private ProgressBarController _healthBar;

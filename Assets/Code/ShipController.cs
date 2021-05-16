@@ -1,9 +1,11 @@
 ﻿using System;
+using Code.Battle;
+using Code.Utils;
 using UnityEngine;
 
 namespace Code
 {
-    public class ShipController : MonoBehaviour
+    public class ShipController : MonoBehaviour, IBattleShip
     {
         public event EventHandler ShipDestroy;
 
@@ -11,22 +13,24 @@ namespace Code
 
         public event EventHandler EnergyChange;
 
-        public event EventHandler<GunController.ShotFinishedEventArgs> ShotFinished;
+        public event EventHandler<EventArgs<ShotModel>> ShotFinished;
         
         public bool ActionInProcess => _gunController.ActionInProcess || !_zoneTaken;
-        
+
+        public PlayerSide PlayerSide => _playerSide;
+
         public bool Destroyed { get; private set; }
 
         public float Heath => _health;
 
         public float Energy => _energy;
         
-        
-        public PlayerId Player;
-        
         public float MaxHealth;
         
         public float MaxEnergy;
+
+        [SerializeField] 
+        private PlayerSide _playerSide;
         
         [SerializeField]
         private float _changeZoneSpeed = 2f;
@@ -65,16 +69,16 @@ namespace Code
 
         public void ChangeBattleZone(Direction4 direction)
         {
-            if (battleZoneDescription.TryGetBattleZoneByDirection(transform.parent, direction, out var resultBattleZone))
+            if (battleZoneDescription.TryGetRelativeBattleZoneFieldByDirection(PlayerSide, direction, out IBattleZoneField battleZoneField))
             {
                 _zoneTaken = false;
-                transform.parent = resultBattleZone;
+                transform.parent = ((BattleZoneField)battleZoneField).Transform;
             }
         }
 
-        public void SimpleShot(Transform target, bool hit, float damage) => _gunController.SimpleShot(target, hit, damage);
+        public void SimpleShot(IBattleZoneField target, float damage) => _gunController.SimpleShot(target, damage);
         
-        public void DirectionShot(Transform target, bool hit, float damage) => _gunController.DirectionShot(target, hit, damage);
+        public void DirectionShot(IBattleZoneField target, float damage) => _gunController.DirectionShot(target, damage);
 
         public void Destroy() => _destroyController.Play();
         
@@ -92,7 +96,7 @@ namespace Code
             _energy = MaxEnergy;
         }
 
-        private void OnGunControllerShotFinished(object sender, GunController.ShotFinishedEventArgs eventArgs)
+        private void OnGunControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)
         {
             ShotFinished?.Invoke(this, eventArgs);
         }

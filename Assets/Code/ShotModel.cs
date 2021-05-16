@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿using Code.Battle;
 
 namespace Code
 {
@@ -14,7 +14,7 @@ namespace Code
             
         public float Length { get; }
             
-        public Transform Target { get; }
+        public IBattleZoneField Target { get; }
 
         public bool Explosion { get; set; }
             
@@ -28,7 +28,7 @@ namespace Code
             
         public float Damage { get; set; }
             
-        public ShotModel(Transform target, float length, SpeedType speed, float damage)
+        public ShotModel(IBattleZoneField target, float length, SpeedType speed, float damage)
         {
             Target = target;
             Length = length;

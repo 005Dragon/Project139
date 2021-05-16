@@ -4,7 +4,7 @@ namespace Code
 {
     public class PlayerBattleZoneDescription
     {
-        public PlayerId PlayerId;
+        public PlayerSide PlayerSide;
 
         public Transform BattleZone;
     }

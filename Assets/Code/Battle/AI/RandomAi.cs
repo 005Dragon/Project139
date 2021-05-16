@@ -1,11 +1,11 @@
 ﻿using System.Linq;
-using Code.BattleActionCreators;
+using Code.Battle.ActionCreators;
 using Code.UI;
 using Code.UI.BattleController;
 using Code.Utils;
 using UnityEngine;
 
-namespace Code.AI
+namespace Code.Battle.AI
 {
     public class RandomAi : MonoBehaviour
     {
@@ -15,7 +15,7 @@ namespace Code.AI
 
         private bool _disabled;
 
-        private PlayerId[] _aiPlayers;
+        private PlayerSide[] _aiPlayers;
 
         private BattleController _battleController;
 
@@ -31,7 +31,7 @@ namespace Code.AI
         {
             _aiPlayers = ReferenceItems.BattleSettings.PlayersSettings
                 .Where(x => x.PlayerManagementType == PlayerManagementType.RandomAi)
-                .Select(x => x.PlayerId)
+                .Select(x => x.playerSide)
                 .ToArray();
 
             _disabled = _aiPlayers.Length == 0;
@@ -47,9 +47,9 @@ namespace Code.AI
                 return;
             }
 
-            foreach (PlayerId player in _aiPlayers)
+            foreach (PlayerSide player in _aiPlayers)
             {
-                ShipController selfShipController = ReferenceItems.ShipControllers.First(x => x.Player == player);
+                ShipController selfShipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == player);
 
                 while (selfShipController.Energy > 0)
                 {
@@ -60,17 +60,18 @@ namespace Code.AI
             }
         }
 
-        private void GenerateNextBattleAction(PlayerId player)
+        private void GenerateNextBattleAction(PlayerSide player)
         {
             IBattleActionCreator actionCreator = _battleActionCreators[Random.Range(0, _battleActionCreators.Length)];
 
-            actionCreator.Player = player;
+            actionCreator.PlayerSide = player;
             
             if (actionCreator is ITargetBattleActionCreator targetBattleActionCreator)
             {
-                Transform[] enableTargets = targetBattleActionCreator.GetEnableTargets(ReferenceItems.BattleZoneDescription).ToArray();
+                IBattleZoneField[] enableTargets =
+                    targetBattleActionCreator.GetEnableTargets(ReferenceItems.BattleZoneDescription).ToArray();
 
-                Transform target = enableTargets[Random.Range(0, enableTargets.Length)];
+                IBattleZoneField target = enableTargets[Random.Range(0, enableTargets.Length)];
                 
                 targetBattleActionCreator.SetTargets(target.ToSingleElementEnumerable());
             }

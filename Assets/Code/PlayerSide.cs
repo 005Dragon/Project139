@@ -1,6 +1,6 @@
 ﻿namespace Code
 {
-    public enum PlayerId
+    public enum PlayerSide
     {
         Left,
         Right

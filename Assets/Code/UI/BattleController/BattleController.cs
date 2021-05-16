@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Code.BattleActionCreators;
+using Code.Battle.ActionCreators;
 using Code.Utils;
 using UnityEngine;
 
@@ -15,7 +15,7 @@ namespace Code.UI.BattleController
 
         private ReferenceItemsController _referenceItemsController;
 
-        private readonly HashSet<PlayerId> _readyPlayers = new HashSet<PlayerId>();
+        private readonly HashSet<PlayerSide> _readyPlayers = new HashSet<PlayerSide>();
 
         private BattleUi _activeUi;
         
@@ -31,7 +31,7 @@ namespace Code.UI.BattleController
             return true;
         }
 
-        public void Ready(PlayerId player)
+        public void Ready(PlayerSide player)
         {
             if (_activeUi == _battleResultUiController)
             {

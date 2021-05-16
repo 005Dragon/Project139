@@ -1,6 +1,6 @@
-﻿using Code.BattleActions;
+﻿using Code.Battle.Actions;
 
-namespace Code.BattleActionCreators
+namespace Code.Battle.ActionCreators
 {
     public class WaitActionCreator : BattleActionCreatorBase
     {

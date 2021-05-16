@@ -9,7 +9,7 @@ namespace Code.UI
     {
         public event EventHandler<CreateBattleActionEventArgs> CreateBattleAction;
         
-        public PlayerId Player;
+        public PlayerSide Player;
         
         private TabController[] _tabControllers;
 

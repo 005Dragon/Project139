@@ -1,7 +1,7 @@
-﻿using Code.BattleActions;
+﻿using Code.Battle.Actions;
 using UnityEngine;
 
-namespace Code.BattleActionCreators
+namespace Code.Battle.ActionCreators
 {
     public class DirectShotBattleActionCreator : BattleActionCreatorBase
     {

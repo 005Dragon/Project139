@@ -5,13 +5,13 @@ namespace Code.Utils
 {
     public static class EnumExtensions
     {
-        public static PlayerId GetAnother(this PlayerId playerId)
+        public static PlayerSide GetAnother(this PlayerSide playerSide)
         {
-            switch (playerId)
+            switch (playerSide)
             {
-                case PlayerId.Left: return PlayerId.Right;
-                case PlayerId.Right: return PlayerId.Left;
-                default: throw new ArgumentOutOfRangeException(nameof(playerId), playerId, null);
+                case PlayerSide.Left: return PlayerSide.Right;
+                case PlayerSide.Right: return PlayerSide.Left;
+                default: throw new ArgumentOutOfRangeException(nameof(playerSide), playerSide, null);
             }
         }
 

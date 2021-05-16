@@ -24,16 +24,16 @@ namespace Code.UI
         {
             base.Enable();
 
-            PlayerId? managedPlayer = ReferenceItems.BattleSettings.ManagedPlayer;
+            PlayerSide? managedPlayer = ReferenceItems.BattleSettings.ManagedPlayer;
 
             if (managedPlayer == null)
             {
                 _winText.enabled = true;
             }
 
-            PlayerId destroyedPlayer = ReferenceItems.ShipControllers.First(x => x.Destroyed).Player;
+            PlayerSide destroyedPlayerSide = ReferenceItems.ShipControllers.First(x => x.Destroyed).PlayerSide;
 
-            if (managedPlayer == destroyedPlayer)
+            if (managedPlayer == destroyedPlayerSide)
             {
                 _loseText.enabled = true;
             }

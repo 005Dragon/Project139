@@ -1,15 +1,15 @@
 ﻿using System;
-using Code.BattleActionCreators;
+using Code.Battle.ActionCreators;
 
 namespace Code.UI
 {
     public class CreateBattleActionEventArgs : EventArgs
     {
-        public PlayerId Player { get; }
+        public PlayerSide Player { get; }
         
         public IBattleActionCreator BattleActionCreator { get; }
 
-        public CreateBattleActionEventArgs(PlayerId player, IBattleActionCreator battleActionCreator)
+        public CreateBattleActionEventArgs(PlayerSide player, IBattleActionCreator battleActionCreator)
         {
             BattleActionCreator = battleActionCreator;
         }

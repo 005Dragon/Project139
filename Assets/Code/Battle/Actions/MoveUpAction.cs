@@ -1,6 +1,6 @@
-﻿using Code.BattleActionCreators;
+﻿using Code.Battle.ActionCreators;
 
-namespace Code.BattleActions
+namespace Code.Battle.Actions
 {
     public class MoveUpAction : BattleAction
     {
@@ -10,7 +10,7 @@ namespace Code.BattleActions
 
         protected override void PlayCore()
         {
-            SelfShipController.ChangeBattleZone(Direction4.Up);
+            SelfShip.ChangeBattleZone(Direction4.Up);
         }
     }
 }

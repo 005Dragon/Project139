@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Code.BattleActionCreators;
-using Code.BattleActions;
+using Code.Battle.ActionCreators;
+using Code.Battle.Actions;
 
 namespace Code.UI.BattleController
 {
@@ -40,7 +40,7 @@ namespace Code.UI.BattleController
         {
             BattleAction battleAction = creator.Create();
 
-            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.Player == battleAction.Player);
+            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == battleAction.PlayerSide);
             shipController.SetEnergy(shipController.Energy - battleAction.EnergyCost);
             
             _battleActionLineUiController.AddBattleAction(battleAction);
@@ -50,7 +50,7 @@ namespace Code.UI.BattleController
         {
             float energyCost = creator.EnergyCost;
 
-            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.Player == creator.Player);
+            ShipController shipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == creator.PlayerSide);
 
             return energyCost <= shipController.Energy;
         }

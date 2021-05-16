@@ -24,7 +24,7 @@ namespace Code.UI.BattleController
         {
             var shipController = (ShipController)sender;
 
-            BattleStatsBarController statsController = _battleStatsUiController.GetStats(shipController.Player);
+            BattleStatsBarController statsController = _battleStatsUiController.GetStats(shipController.PlayerSide);
             
             statsController.SetHealth(shipController.Heath);
         }
@@ -33,7 +33,7 @@ namespace Code.UI.BattleController
         {
             var shipController = (ShipController)sender;
 
-            BattleStatsBarController statsController = _battleStatsUiController.GetStats(shipController.Player);
+            BattleStatsBarController statsController = _battleStatsUiController.GetStats(shipController.PlayerSide);
             
             statsController.SetEnergy(shipController.Energy);
         }

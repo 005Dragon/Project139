@@ -1,4 +1,5 @@
 ﻿using System;
+using Code.Battle;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -6,7 +7,7 @@ namespace Code.UI
 {
     public class TargetGlowController : MonoBehaviour, IManagedInitializable
     {
-        public PlayerBattleZoneDescription PlayerBattleZoneDescription { get; set; }
+        public BattleZoneField BattleZoneField { get; set; }
 
         public event EventHandler Selected;
         

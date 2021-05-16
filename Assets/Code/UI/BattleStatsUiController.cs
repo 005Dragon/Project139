@@ -9,9 +9,9 @@ namespace Code.UI
 
         private BattleStatsBarController[] _statsBarControllers;
 
-        public BattleStatsBarController GetStats(PlayerId player)
+        public BattleStatsBarController GetStats(PlayerSide playerSide)
         {
-            return _statsBarControllers.First(x => x.Player == player);
+            return _statsBarControllers.First(x => x.PlayerSide == playerSide);
         }
         
         public override void Enable()
@@ -28,7 +28,7 @@ namespace Code.UI
 
             foreach (BattleStatsBarController statsBarController in _statsBarControllers)
             {
-                 ShipController shipController = ReferenceItems.ShipControllers.First(x => x.Player == statsBarController.Player);
+                 ShipController shipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == statsBarController.PlayerSide);
                 
                 statsBarController.Build(shipController);
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Code.Battle;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -26,7 +27,7 @@ namespace Code
         public void Initialize()
         {
             _startPosition = transform.position;
-            _targetPosition = ShotModel.Target.transform.position;
+            _targetPosition = ((BattleZoneField)ShotModel.Target).Transform.position;
             
             _beamLifeTime = 0f;
         }

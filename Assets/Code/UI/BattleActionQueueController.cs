@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Code.BattleActions;
+using Code.Battle;
+using Code.Battle.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Code.UI
 {
-    public class BattleActionQueueController : MonoBehaviour
+    public class BattleActionQueueController : MonoBehaviour, IBattleActionQueue
     {
         private class BattleActionQueueItemPair
         {
@@ -21,7 +22,7 @@ namespace Code.UI
             }
         }
 
-        public PlayerId Player; 
+        public PlayerSide PlayerSide => _playerSide;
 
         public float CellSize;
         public float Gap;
@@ -29,6 +30,9 @@ namespace Code.UI
         public float MinDistanceToLerp;
 
         public IEnumerable<BattleAction> BattleActionModels => QueueItems.Select(x => x.Action);
+
+        [SerializeField]
+        private PlayerSide _playerSide;
 
         [SerializeField] 
         private Transform _queue; 

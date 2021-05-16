@@ -1,6 +1,6 @@
 using System;
 using System.Linq;
-using Code.BattleActionCreators;
+using Code.Battle.ActionCreators;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -9,7 +9,7 @@ namespace Code.UI
 {
     public class BattleActionController : MonoBehaviour, IManagedInitializable
     {
-        public PlayerId Player { get; set; }
+        public PlayerSide Player { get; set; }
 
         public event EventHandler Click;
 
@@ -24,7 +24,7 @@ namespace Code.UI
         {
             Sprite sprite = GetComponentsInChildren<Image>().Last().sprite;
 
-            BattleActionCreator.Player = Player;
+            BattleActionCreator.PlayerSide = Player;
             BattleActionCreator.Sprite = sprite;
         }
     }

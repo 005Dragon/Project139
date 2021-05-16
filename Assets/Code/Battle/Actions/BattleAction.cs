@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
-using Code.BattleActionCreators;
+using Code.Battle.ActionCreators;
 using Code.Utils;
 using UnityEngine;
 
-namespace Code.BattleActions
+namespace Code.Battle.Actions
 {
     public abstract class BattleAction : IDisposable
     {
-        public PlayerId Player { get; }
+        public PlayerSide PlayerSide { get; }
         
         public BattleActionType ActionType { get; }
         
@@ -18,27 +18,27 @@ namespace Code.BattleActions
         
         public bool Started { get; protected set; }
 
-        public bool Finished => Started && !SelfShipController.ActionInProcess;
+        public bool Finished => Started && !SelfShip.ActionInProcess;
 
-        protected ShipController SelfShipController { get; private set; }
-        protected ShipController EnemyShipController { get; private set; }
+        protected IBattleShip SelfShip { get; private set; }
+        protected IBattleShip EnemyShip { get; private set; }
         
-        protected BattleZoneDescription BattleZoneDescription { get; private set; }
+        protected IBattleZone BattleZone { get; private set; }
 
         protected BattleAction(IBattleActionCreator creator)
         {
-            Player = creator.Player;
+            PlayerSide = creator.PlayerSide;
             ActionType = creator.ActionType;
             Sprite = creator.Sprite;
             EnergyCost = creator.EnergyCost;
         }
 
-        public void Play(ShipController[] shipControllers, BattleZoneDescription battleZoneDescription)
+        public void Play(IBattleShip[] shipControllers, IBattleZone battleZone)
         {
-            SelfShipController = shipControllers.First(x => x.Player == Player);
-            EnemyShipController = shipControllers.First(x => x.Player == Player.GetAnother());
+            SelfShip = shipControllers.First(x => x.PlayerSide == PlayerSide);
+            EnemyShip = shipControllers.First(x => x.PlayerSide == PlayerSide.GetAnother());
             
-            BattleZoneDescription = battleZoneDescription;
+            BattleZone = battleZone;
 
             PlayCore();
             
