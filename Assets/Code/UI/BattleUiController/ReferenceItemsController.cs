@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Code.UI.BattleController
+namespace Code.UI.BattleUiController
 {
     public class ReferenceItemsController : MonoBehaviour
     {

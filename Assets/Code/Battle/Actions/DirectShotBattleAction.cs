@@ -1,4 +1,6 @@
-﻿using Code.Battle.ActionCreators;
+﻿using System;
+using Code.Battle.ActionCreators;
+using Code.Battle.Log;
 using Code.Utils;
 
 namespace Code.Battle.Actions
@@ -6,6 +8,8 @@ namespace Code.Battle.Actions
     public class DirectShotBattleAction : BattleAction
     {
         public float Damage { get; }
+
+        private float _totalDamage;
         
         public DirectShotBattleAction(IBattleActionCreator creator, float damage) : base(creator)
         {
@@ -20,25 +24,32 @@ namespace Code.Battle.Actions
                 out IBattleZoneField target
             );
 
+            SelfShip.Shot += OnSelfShipShot;
+            SelfShip.ShotFinished += OnSelfShipShotFinished;
+            
             SelfShip.DirectionShot(target, Damage);
-
-            SelfShip.ShotFinished += OnShipControllerShotFinished;
         }
 
-        private void OnShipControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)
+        private void OnSelfShipShot(object sender, EventArgs<ShotModel> eventArgs)
         {
             if (eventArgs.Value.Target.TryGetShip(out IBattleShip ship))
             {
+                _totalDamage += eventArgs.Value.Damage;
+                
                 ship.TakeDamage(eventArgs.Value.Damage);
             }
         }
-
-        public override void Dispose()
+        
+        private void OnSelfShipShotFinished(object sender, EventArgs eventArgs)
         {
-            if (SelfShip != null)
-            {
-                SelfShip.ShotFinished -= OnShipControllerShotFinished;    
-            }
+            var ship = (IBattleShip) sender;
+
+            ship.Shot -= OnSelfShipShot;
+            ship.ShotFinished -= OnSelfShipShotFinished;
+
+            Logger.LogActionMessage(BattleLoggerMessageType.Info, this, _totalDamage + " damage.");
+            
+            Finish();
         }
     }
 }

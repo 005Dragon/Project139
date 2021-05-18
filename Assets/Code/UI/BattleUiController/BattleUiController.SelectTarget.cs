@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Code.UI.BattleController
+namespace Code.UI.BattleUiController
 {
-    public partial class BattleController
+    public partial class BattleUiController
          {
              private BattleSelectTargetUiController _battleSelectTargetUiController;
              

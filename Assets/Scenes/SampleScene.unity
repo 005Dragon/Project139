@@ -1869,9 +1869,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayersSettings:
-  - PlayerId: 0
-    PlayerManagementType: 1
-  - PlayerId: 1
+  - playerSide: 0
+    PlayerManagementType: 2
+  - playerSide: 1
     PlayerManagementType: 2
   BattleActionTemplates:
   - {fileID: 687945281585068340, guid: 8038bbef269502c41a90ce38b59092a9, type: 3}
@@ -1958,7 +1958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd833bb9afb4401f844962a1320097ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 0
+  PlayerSide: 0
   _healthBar: {fileID: 1209795556}
   _EnergyBar: {fileID: 1954100313}
 --- !u!1 &922579443
@@ -2080,9 +2080,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eab79537059b84bb079e9195c47377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 0
   MaxHealth: 10
   MaxEnergy: 2
+  _playerSide: 0
   _changeZoneSpeed: 2
   battleZoneDescription: {fileID: 1784227552}
 --- !u!1 &1009761962
@@ -3169,9 +3169,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eab79537059b84bb079e9195c47377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 1
   MaxHealth: 10
   MaxEnergy: 2
+  _playerSide: 1
   _changeZoneSpeed: 2
   battleZoneDescription: {fileID: 1784227552}
 --- !u!4 &1441481468
@@ -3239,7 +3239,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd833bb9afb4401f844962a1320097ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 1
+  PlayerSide: 1
   _healthBar: {fileID: 1370242317}
   _EnergyBar: {fileID: 1514276091}
 --- !u!1 &1456870681
@@ -3470,10 +3470,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc0c755fe96444e92566f38859a5851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 1
   CellSize: 128
   Gap: 5
   MinDistanceToLerp: 2.5
+  _playerSide: 1
   _queue: {fileID: 1644401694}
   _startPositionQueue: {fileID: 230818952}
   _endPositionQueue: {fileID: 1927054236}
@@ -3716,7 +3716,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver. 0.1.0.0 work in progress.
+  m_Text: Ver. 0.1.1.0 work in progress.
 --- !u!222 &1705000490
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3918,10 +3918,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc0c755fe96444e92566f38859a5851, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: 0
   CellSize: 128
   Gap: 5
   MinDistanceToLerp: 2.5
+  _playerSide: 0
   _queue: {fileID: 1824099896}
   _startPositionQueue: {fileID: 1090994000}
   _endPositionQueue: {fileID: 1671570014}
@@ -4367,6 +4367,10 @@ PrefabInstance:
     - target: {fileID: 1429250469970684890, guid: e4430cd2309c1c749b06d72be5739495, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3118100188059687482, guid: e4430cd2309c1c749b06d72be5739495, type: 3}
+      propertyPath: _playerBattleZones.Array.data[1].playerSide
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3470576204855016463, guid: e4430cd2309c1c749b06d72be5739495, type: 3}
       propertyPath: m_LocalPosition.y

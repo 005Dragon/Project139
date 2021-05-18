@@ -1,14 +1,17 @@
 ﻿using System;
 using Code.Battle.ActionCreators;
+using Code.Battle.Log;
 using Code.Utils;
 
 namespace Code.Battle.Actions
 {
-    public class SimpleShotBattleAction : BattleAction, IDisposable
+    public class SimpleShotBattleAction : BattleAction
     {
         public IBattleZoneField ZoneField { get; }
         
         public float Damage { get; }
+
+        private float _totalDamage;
 
         public SimpleShotBattleAction(IBattleActionCreator creator, IBattleZoneField target, float damage) : base(creator)
         {
@@ -18,25 +21,32 @@ namespace Code.Battle.Actions
 
         protected override void PlayCore()
         {
+            SelfShip.Shot += OnSelfShipShot;
+            SelfShip.ShotFinished += OnSelfShipShotFinished;
+            
             SelfShip.SimpleShot(ZoneField, Damage);
-
-            SelfShip.ShotFinished += OnShipControllerShotFinished;
         }
 
-        private void OnShipControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)
+        private void OnSelfShipShot(object sender, EventArgs<ShotModel> eventArgs)
         {
             if (eventArgs.Value.Target.TryGetShip(out IBattleShip targetShip))
             {
+                _totalDamage += eventArgs.Value.Damage;
+                
                 targetShip.TakeDamage(eventArgs.Value.Damage);
             }
         }
-
-        public override void Dispose()
+        
+        private void OnSelfShipShotFinished(object sender, EventArgs eventArgs)
         {
-            if (SelfShip != null)
-            {
-                SelfShip.ShotFinished -= OnShipControllerShotFinished;    
-            }
+            var ship = (IBattleShip) sender;
+
+            ship.Shot -= OnSelfShipShot;
+            ship.ShotFinished -= OnSelfShipShotFinished;
+
+            Logger.LogActionMessage(BattleLoggerMessageType.Info, this, _totalDamage + " damage.");
+            
+            Finish();
         }
     }
 }

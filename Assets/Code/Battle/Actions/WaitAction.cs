@@ -1,4 +1,6 @@
-﻿using Code.Battle.ActionCreators;
+﻿using System;
+using Code.Battle.ActionCreators;
+using Code.Battle.Log;
 
 namespace Code.Battle.Actions
 {
@@ -10,6 +12,9 @@ namespace Code.Battle.Actions
 
         protected override void PlayCore()
         {
+            Logger.LogActionMessage(BattleLoggerMessageType.Info, this, string.Empty);
+            
+            Finish();
         }
     }
 }

@@ -1,13 +1,18 @@
 ﻿using System;
 using System.Linq;
 using Code.Battle.ActionCreators;
+using Code.Battle.Log;
 using Code.Utils;
 using UnityEngine;
 
 namespace Code.Battle.Actions
 {
-    public abstract class BattleAction : IDisposable
+    public abstract class BattleAction
     {
+        public event EventHandler Finished;
+        
+        public int Id { get; set; }
+        
         public PlayerSide PlayerSide { get; }
         
         public BattleActionType ActionType { get; }
@@ -16,9 +21,7 @@ namespace Code.Battle.Actions
         
         public float EnergyCost { get; }
         
-        public bool Started { get; protected set; }
-
-        public bool Finished => Started && !SelfShip.ActionInProcess;
+        protected IBattleLogger Logger { get; }
 
         protected IBattleShip SelfShip { get; private set; }
         protected IBattleShip EnemyShip { get; private set; }
@@ -31,6 +34,7 @@ namespace Code.Battle.Actions
             ActionType = creator.ActionType;
             Sprite = creator.Sprite;
             EnergyCost = creator.EnergyCost;
+            Logger = creator.Logger;
         }
 
         public void Play(IBattleShip[] shipControllers, IBattleZone battleZone)
@@ -41,14 +45,13 @@ namespace Code.Battle.Actions
             BattleZone = battleZone;
 
             PlayCore();
-            
-            Started = true;
         }
 
         protected abstract void PlayCore();
-        
-        public virtual void Dispose()
+
+        protected void Finish()
         {
+            Finished?.Invoke(this, EventArgs.Empty);
         }
     }
 }

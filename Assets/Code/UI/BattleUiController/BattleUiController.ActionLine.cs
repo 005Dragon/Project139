@@ -3,9 +3,9 @@ using System.Linq;
 using Code.Battle.Actions;
 using Code.Utils;
 
-namespace Code.UI.BattleController
+namespace Code.UI.BattleUiController
 {
-    public partial class BattleController
+    public partial class BattleUiController
     {
         private BattleActionLineUiController _battleActionLineUiController;
         

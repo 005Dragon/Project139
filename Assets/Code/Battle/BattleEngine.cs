@@ -2,27 +2,36 @@
 using System.Linq;
 using Code.Battle.ActionCreators;
 using Code.Battle.Actions;
+using Code.Battle.Log;
 using Code.Utils;
 
 namespace Code.Battle
 {
-    public class Engine : IManagedInitializable
+    public class BattleEngine : IManagedInitializable
     {
         private readonly IBattlePlayer[] _players;
         private readonly IBattleShip[] _ships;
+        private readonly IBattleZone _battleZone;
         private readonly IBattleActionQueue[] _battleActionQueues;
-        private readonly Func<BattleAction[], IBattleStep> _stepCreator;
+        private readonly IBattleActionCreator[] _battleActionCreators;
+        private readonly IBattleLogger _logger;
 
-        public Engine(
+        private int _stepIndex;
+
+        public BattleEngine(
             IBattlePlayer[] players, 
-            IBattleShip[] ships, 
+            IBattleShip[] ships,
+            IBattleZone battleZone,
             IBattleActionQueue[] battleActionQueues,
-            Func<BattleAction[], IBattleStep> stepCreator)
+            IBattleActionCreator[] battleActionCreators,
+            IBattleLogger logger)
         {
             _players = players;
-            _battleActionQueues = battleActionQueues;
-            _stepCreator = stepCreator;
             _ships = ships;
+            _battleZone = battleZone;
+            _battleActionQueues = battleActionQueues;
+            _battleActionCreators = battleActionCreators;
+            _logger = logger;
         }
 
         public void Initialize()
@@ -32,6 +41,23 @@ namespace Code.Battle
                 player.CreateBattleAction += OnCreateBattleAction;
                 player.Ready += OnPlayerReady;
             }
+
+            foreach (IBattleActionCreator battleActionCreator in _battleActionCreators)
+            {
+                battleActionCreator.Logger = _logger;
+            }
+
+            foreach (IBattlePlayer battlePlayer in _players)
+            {
+                battlePlayer.AddEnableBattleActionCreators(_battleActionCreators);
+            }
+
+            foreach (IBattleShip ship in _ships)
+            {
+                ship.ShipDestroy += OnShipDestroy;
+            }
+
+            _logger.LogMessage(BattleLoggerMessageType.Info, "Battle initialized.");
         }
 
         private void OnCreateBattleAction(object sender, EventArgs<IBattleActionCreator> eventArgs)
@@ -71,10 +97,14 @@ namespace Code.Battle
             IBattleActionQueue actionQueue = _battleActionQueues.First(x => x.PlayerSide == creator.PlayerSide);
             
             actionQueue.Enqueue(battleAction);
+            
+            _logger.LogActionMessage(BattleLoggerMessageType.Info, battleAction, "Created.");
         }
 
         private void OnPlayerReady(object sender, EventArgs eventArgs)
         {
+            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ((IBattlePlayer)sender).PlayerSide, "Ready.");
+            
             bool allPlayersReady = _players.All(x => x.IsReady);
 
             if (allPlayersReady)
@@ -85,6 +115,15 @@ namespace Code.Battle
 
         private void NextStep()
         {
+            _stepIndex++;
+            
+            _logger.LogMessage(BattleLoggerMessageType.Info, $"Start {_stepIndex} step.");
+            
+            foreach (IBattleShip ship in _ships)
+            {
+                _logger.LogShipMessage(BattleLoggerMessageType.Info, ship, string.Empty);
+            }
+            
             foreach (IBattlePlayer player in _players)
             {
                 player.Sleep();
@@ -92,7 +131,7 @@ namespace Code.Battle
             
             BattleAction[] actions = _battleActionQueues.Select(x => x.Dequeue()).Where(x => x != null).ToArray();
 
-            IBattleStep step = _stepCreator.Invoke(actions);
+            BattleStep step = new BattleStep(_stepIndex, actions, _ships, _battleZone);
 
             step.Finished += OnStepFinished;
             
@@ -101,7 +140,7 @@ namespace Code.Battle
 
         private void OnStepFinished(object sender, EventArgs eventArgs)
         {
-            var step = (IBattleStep) sender;
+            var step = (BattleStep) sender;
 
             step.Finished -= OnStepFinished;
 
@@ -109,6 +148,22 @@ namespace Code.Battle
             {
                 player.Wake();
             }
+            
+            _logger.LogMessage(BattleLoggerMessageType.Info, $"Step {_stepIndex} finished.");
+        }
+        
+        private void OnShipDestroy(object sender, EventArgs eventArgs)
+        {
+            var ship = (IBattleShip) sender;
+            
+            foreach (IBattlePlayer battlePlayer in _players)
+            {
+                battlePlayer.Sleep();
+            }
+            
+            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ship.PlayerSide, "Destroy.");
+            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ship.PlayerSide.GetAnother(), "Winner!");
+            
         }
     }
 }

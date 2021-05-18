@@ -85,8 +85,6 @@ namespace Code.UI
                 return;
             }
 
-            battleAction.Dispose();
-
             CancelAction?.Invoke(this, new EventArgs<BattleAction>(battleAction));
         }
 
@@ -94,14 +92,6 @@ namespace Code.UI
         {
             _actionQueueControllers = GetComponentsInChildren<BattleActionQueueController>();
             Canvas = GetComponent<Canvas>();
-        }
-
-        private void Update()
-        {
-            if (!Finished)
-            {
-                _currentPlayStep.Update();
-            }
         }
 
         private BattleStep PlayNextStep()
@@ -113,7 +103,7 @@ namespace Code.UI
                 return null;
             }
 
-            var battleStep = new BattleStep(actions, ReferenceItems.ShipControllers, ReferenceItems.BattleZoneDescription);
+            var battleStep = new BattleStep(0, actions, ReferenceItems.ShipControllers, ReferenceItems.BattleZoneDescription);
             battleStep.Finished += OnBattleStepFinished; 
             
             battleStep.Play();
@@ -126,7 +116,6 @@ namespace Code.UI
             var battleStep = (BattleStep) sender;
             battleStep.Finished -= OnBattleStepFinished;
             
-            _currentPlayStep.Dispose();
             _currentPlayStep = PlayNextStep();
 
             if (_currentPlayStep == null)

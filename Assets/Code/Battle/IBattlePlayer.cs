@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Code.Battle.ActionCreators;
 using Code.Utils;
 
@@ -10,8 +11,10 @@ namespace Code.Battle
         
         bool IsReady { get; }
 
-        event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction; 
+        event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         event EventHandler Ready;
+
+        void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreator);
         
         void Sleep();
 

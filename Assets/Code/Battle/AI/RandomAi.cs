@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Code.Battle.ActionCreators;
 using Code.UI;
-using Code.UI.BattleController;
+using Code.UI.BattleUiController;
 using Code.Utils;
 using UnityEngine;
 
@@ -17,14 +17,14 @@ namespace Code.Battle.AI
 
         private PlayerSide[] _aiPlayers;
 
-        private BattleController _battleController;
+        private BattleUiController _battleUiController;
 
         private IBattleActionCreator[] _battleActionCreators;
         
         private void Awake()
         {
             _referenceItemsController = GetComponent<ReferenceItemsController>();
-            _battleController = GetComponent<BattleController>();
+            _battleUiController = GetComponent<BattleUiController>();
         }
 
         private void Start()
@@ -56,7 +56,7 @@ namespace Code.Battle.AI
                     GenerateNextBattleAction(player);
                 }
                 
-                _battleController.Ready(player);
+                _battleUiController.Ready(player);
             }
         }
 
@@ -76,7 +76,7 @@ namespace Code.Battle.AI
                 targetBattleActionCreator.SetTargets(target.ToSingleElementEnumerable());
             }
 
-            _battleController.TryCreateBattleAction(actionCreator);
+            _battleUiController.TryCreateBattleAction(actionCreator);
         }
     }
 }

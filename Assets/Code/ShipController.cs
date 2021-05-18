@@ -13,9 +13,9 @@ namespace Code
 
         public event EventHandler EnergyChange;
 
-        public event EventHandler<EventArgs<ShotModel>> ShotFinished;
-        
-        public bool ActionInProcess => _gunController.ActionInProcess || !_zoneTaken;
+        public event EventHandler<EventArgs<ShotModel>> Shot;
+        public event EventHandler ChangeBattleZoneFinished;
+        public event EventHandler ShotFinished;
 
         public PlayerSide PlayerSide => _playerSide;
 
@@ -42,6 +42,7 @@ namespace Code
         private GunController _gunController;
 
         private bool _zoneTaken;
+        private bool _shotFinihsed;
 
         private float _health;
         private float _energy;
@@ -67,18 +68,37 @@ namespace Code
             EnergyChange?.Invoke(this, EventArgs.Empty);
         }
 
-        public void ChangeBattleZone(Direction4 direction)
+        public bool TryChangeBattleZone(Direction4 direction, out IBattleZoneField resultZoneField)
         {
+            _zoneTaken = false;
+            
             if (battleZoneDescription.TryGetRelativeBattleZoneFieldByDirection(PlayerSide, direction, out IBattleZoneField battleZoneField))
             {
-                _zoneTaken = false;
                 transform.parent = ((BattleZoneField)battleZoneField).Transform;
+
+                resultZoneField = battleZoneField;
+                
+                return true;
             }
+
+            resultZoneField = default;
+            
+            return false;
         }
 
-        public void SimpleShot(IBattleZoneField target, float damage) => _gunController.SimpleShot(target, damage);
-        
-        public void DirectionShot(IBattleZoneField target, float damage) => _gunController.DirectionShot(target, damage);
+        public void SimpleShot(IBattleZoneField target, float damage)
+        {
+            _shotFinihsed = false;
+            
+            _gunController.SimpleShot(target, damage);
+        }
+
+        public void DirectionShot(IBattleZoneField target, float damage)
+        {
+            _shotFinihsed = false;
+            
+            _gunController.DirectionShot(target, damage);
+        }
 
         public void Destroy() => _destroyController.Play();
         
@@ -98,7 +118,7 @@ namespace Code
 
         private void OnGunControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)
         {
-            ShotFinished?.Invoke(this, eventArgs);
+            Shot?.Invoke(this, eventArgs);
         }
 
         private void OnDestroyControllerFinished(object sender, EventArgs e)
@@ -110,14 +130,26 @@ namespace Code
 
         private void Update()
         {
-            if (transform.localPosition.magnitude < 0.1f)
-            {
-                _zoneTaken = true;
-            }
-
             if (!_zoneTaken)
             {
+                if (transform.localPosition.magnitude < 0.1f)
+                {
+                    ChangeBattleZoneFinished?.Invoke(this, EventArgs.Empty);
+                
+                    _zoneTaken = true;
+                }
+                
                 transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * _changeZoneSpeed);
+            }
+
+            if (!_shotFinihsed)
+            {
+                if (!_gunController.ActionInProcess)
+                {
+                    _shotFinihsed = true;
+                    
+                    ShotFinished?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
     }

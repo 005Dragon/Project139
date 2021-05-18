@@ -2,12 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Code.Battle.ActionCreators;
-using Code.Utils;
 using UnityEngine;
 
-namespace Code.UI.BattleController
+namespace Code.UI.BattleUiController
 {
-    public partial class BattleController : MonoBehaviour
+    public partial class BattleUiController : MonoBehaviour
     {
         private readonly List<BattleUi> _uis = new List<BattleUi>();
 

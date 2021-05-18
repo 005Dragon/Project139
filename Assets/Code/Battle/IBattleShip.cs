@@ -5,17 +5,18 @@ namespace Code.Battle
 {
     public interface IBattleShip
     {
-        event EventHandler<EventArgs<ShotModel>> ShotFinished;
+        event EventHandler ShipDestroy;
+        event EventHandler<EventArgs<ShotModel>> Shot;
+        event EventHandler ChangeBattleZoneFinished;
+        event EventHandler ShotFinished;
         
         PlayerSide PlayerSide { get; }
-        
-        bool ActionInProcess { get; }
         
         float Energy { get; }
 
         void SetEnergy(float value);
 
-        void ChangeBattleZone(Direction4 direction);
+        bool TryChangeBattleZone(Direction4 direction, out IBattleZoneField resultBattleZoneField);
 
         void SimpleShot(IBattleZoneField target, float damage);
 
