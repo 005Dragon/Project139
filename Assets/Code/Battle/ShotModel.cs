@@ -1,7 +1,6 @@
-﻿using Code.Battle;
-using Code.Battle.Core;
+﻿using Code.Battle.Core;
 
-namespace Code
+namespace Code.Battle
 {
     public class ShotModel
     {

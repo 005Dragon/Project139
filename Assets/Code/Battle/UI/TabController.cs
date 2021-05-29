@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using Code.UI;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.Battle.UI
 {
     public class TabController : MonoBehaviour
     {

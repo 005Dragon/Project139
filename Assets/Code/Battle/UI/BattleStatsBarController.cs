@@ -1,8 +1,7 @@
-﻿using Code.Battle.Core;
-using Code.UI.ProgressBar;
+﻿using Code.UI.ProgressBar;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.Battle.UI
 {
     public class BattleStatsBarController : MonoBehaviour
     {

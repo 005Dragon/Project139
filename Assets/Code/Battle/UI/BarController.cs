@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Battle.Core;
 using Code.Battle.Core.Log;
+using Code.Utils;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.Battle.UI
 {
     public class BarController : MonoBehaviour
     {
-        public event EventHandler<CreateBattleActionEventArgs> CreateBattleAction;
+        public event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         
         public PlayerSide playerSide;
         
@@ -97,7 +99,7 @@ namespace Code.UI
         {
             var battleActionController = (BattleActionController) sender;
 
-            var eventArgs = new CreateBattleActionEventArgs(playerSide, battleActionController.BattleActionCreator);
+            var eventArgs = new EventArgs<IBattleActionCreator>(battleActionController.BattleActionCreator);
             
             CreateBattleAction?.Invoke(this, eventArgs);
         }

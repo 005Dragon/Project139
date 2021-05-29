@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Code.UI
+namespace Code.Battle
 {
     public interface IBattleReferenceItems
     {

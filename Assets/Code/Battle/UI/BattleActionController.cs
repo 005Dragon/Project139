@@ -1,12 +1,11 @@
 using System;
 using System.Linq;
-using Code.Battle.ActionCreators;
 using Code.Battle.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace Code.UI
+namespace Code.Battle.UI
 {
     public class BattleActionController : MonoBehaviour, IManagedInitializable
     {

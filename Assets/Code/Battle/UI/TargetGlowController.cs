@@ -1,10 +1,9 @@
 ﻿using System;
-using Code.Battle;
 using Code.Battle.Core;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Code.UI
+namespace Code.Battle.UI
 {
     public class TargetGlowController : MonoBehaviour, IManagedInitializable
     {

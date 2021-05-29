@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Code.Battle.Core;
 using Code.UI;
-using Code.UI.BattleUiController;
 using UnityEngine;
 
 namespace Code.Battle.UI

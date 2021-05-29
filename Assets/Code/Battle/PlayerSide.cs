@@ -1,4 +1,4 @@
-﻿namespace Code
+﻿namespace Code.Battle
 {
     public enum PlayerSide
     {

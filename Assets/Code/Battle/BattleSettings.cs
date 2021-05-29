@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Code.UI
+namespace Code.Battle
 {
     public class BattleSettings : MonoBehaviour
     {

@@ -1,10 +1,9 @@
 ﻿using System;
-using Code.Battle;
 using Code.Battle.Core;
 using Code.Utils;
 using UnityEngine;
 
-namespace Code
+namespace Code.Battle
 {
     public class ShipController : MonoBehaviour, IBattleShip
     {

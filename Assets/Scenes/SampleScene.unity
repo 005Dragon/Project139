@@ -894,7 +894,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 364007427}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 80777c1b3b084c23bba92dc383ef528c, type: 3}
+  m_Script: {fileID: 11500000, guid: be1450f954944c16a702bde0845eb637, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &384874903
@@ -1086,7 +1086,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 423576847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac628d845da15bd47872374e01ba1b54, type: 3}
+  m_Script: {fileID: 11500000, guid: cc668c53fae04efea1f4fcd6f1dd6fe1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _selfTargetGlowTemplate: {fileID: 462023144497108581, guid: a842ae07fca3dd54c81c02beba7d677f, type: 3}
@@ -1875,9 +1875,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayersSettings:
   - playerSide: 0
-    PlayerManagementType: 1
+    PlayerManagementType: 2
   - playerSide: 1
-    PlayerManagementType: 0
+    PlayerManagementType: 2
   BattleActionTemplates:
   - {fileID: 687945281585068340, guid: 8038bbef269502c41a90ce38b59092a9, type: 3}
   - {fileID: 2956221343200234605, guid: 7d7acb31c914110458f7ddcb603752b0, type: 3}
@@ -2073,7 +2073,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eab79537059b84bb079e9195c47377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
+  _maxHealth: 10
   _maxEnergy: 2
   _playerSide: 0
   _changeZoneSpeed: 2
@@ -3175,7 +3175,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e1eab79537059b84bb079e9195c47377, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MaxHealth: 10
+  _maxHealth: 10
   _maxEnergy: 2
   _playerSide: 1
   _changeZoneSpeed: 2
@@ -3722,7 +3722,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver. 0.1.1.0 work in progress.
+  m_Text: Ver. 0.1.2.0 work in progress.
 --- !u!222 &1705000490
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3824,7 +3824,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 423576852}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Code.UI.BattleSelectTargetUiController, Assembly-CSharp
         m_MethodName: OnCancel
         m_Mode: 1
@@ -4589,6 +4589,10 @@ PrefabInstance:
     - target: {fileID: 5298890886394883454, guid: 9142572ad0698da4f89a7d64afb9a160, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5298890886394883455, guid: 9142572ad0698da4f89a7d64afb9a160, type: 3}
+      propertyPath: playerSide
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9142572ad0698da4f89a7d64afb9a160, type: 3}

@@ -73,9 +73,9 @@ namespace Code.Battle.UI
             _barControllers = GetComponentsInChildren<BarController>();
         }
         
-        private void OnCreateBattleAction(object sender, CreateBattleActionEventArgs eventArgs)
+        private void OnCreateBattleAction(object sender, EventArgs<IBattleActionCreator> eventArgs)
         {
-            if (eventArgs.BattleActionCreator is ITargetBattleActionCreator targetBattleActionCreator)
+            if (eventArgs.Value is ITargetBattleActionCreator targetBattleActionCreator)
             {
                 _canvas.enabled = false;
                 
@@ -83,7 +83,7 @@ namespace Code.Battle.UI
             }
             else
             {
-                CreateBattleAction?.Invoke(this, new EventArgs<IBattleActionCreator>(eventArgs.BattleActionCreator));                
+                CreateBattleAction?.Invoke(this, eventArgs);                
             }
         }
         

@@ -36,7 +36,7 @@ namespace Code
         private int _currentExplosionCont; 
 
         private bool _play;
-        private bool _childDestroyd;
+        private bool _childDestroyed;
 
         private Animator _animator;
         private static readonly int AnimatorDestroy = Animator.StringToHash("Destroy");
@@ -59,14 +59,14 @@ namespace Code
                     _animator.SetBool(AnimatorDestroy, true);
                 }
 
-                if (!_childDestroyd)
+                if (!_childDestroyed)
                 {
                     for (int i = 0; i < transform.childCount; i++)
                     {
                         Destroy(transform.GetChild(i).gameObject);
                     }
                     
-                    _childDestroyd = true;
+                    _childDestroyed = true;
                 }
                 
                 float currentTime = Time.time;
