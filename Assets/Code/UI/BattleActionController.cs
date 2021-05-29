@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Code.Battle.ActionCreators;
+using Code.Battle.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
@@ -9,11 +10,15 @@ namespace Code.UI
 {
     public class BattleActionController : MonoBehaviour, IManagedInitializable
     {
-        public PlayerSide Player { get; set; }
+        public PlayerSide PlayerSide { get; set; }
 
         public event EventHandler Click;
 
-        public IBattleActionCreator BattleActionCreator => (IBattleActionCreator) _battleActionModelCreator;
+        public IBattleActionCreator BattleActionCreator
+        {
+            get => (IBattleActionCreator) _battleActionModelCreator;
+            set => _battleActionModelCreator = (Object)value;
+        }
         
         [SerializeField]
         private Object _battleActionModelCreator;
@@ -24,7 +29,7 @@ namespace Code.UI
         {
             Sprite sprite = GetComponentsInChildren<Image>().Last().sprite;
 
-            BattleActionCreator.PlayerSide = Player;
+            BattleActionCreator.PlayerSide = PlayerSide;
             BattleActionCreator.Sprite = sprite;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Battle.Core.Log;
 using UnityEngine;
 
 namespace Code.UI
@@ -9,13 +10,13 @@ namespace Code.UI
     {
         public event EventHandler<CreateBattleActionEventArgs> CreateBattleAction;
         
-        public PlayerSide Player;
+        public PlayerSide playerSide;
         
         private TabController[] _tabControllers;
 
-        public void Build(IEnumerable<GameObject> battleActionTemplates)
+        public void Build(IEnumerable<GameObject> battleActionTemplates, IBattleLogger logger)
         {
-            List<BattleActionController> battleActionControllers = CreateBattleActions(battleActionTemplates).ToList();
+            List<BattleActionController> battleActionControllers = CreateBattleActions(battleActionTemplates, logger).ToList();
 
             foreach (TabController tabController in _tabControllers)
             {
@@ -73,7 +74,7 @@ namespace Code.UI
             }
         }
 
-        private IEnumerable<BattleActionController> CreateBattleActions(IEnumerable<GameObject> battleActionTemplates)
+        private IEnumerable<BattleActionController> CreateBattleActions(IEnumerable<GameObject> battleActionTemplates, IBattleLogger logger)
         {
             foreach (GameObject template in battleActionTemplates)
             {
@@ -81,7 +82,8 @@ namespace Code.UI
 
                 var battleActionController = battleActionGameObject.GetComponent<BattleActionController>();
 
-                battleActionController.Player = Player;
+                battleActionController.PlayerSide = playerSide;
+                battleActionController.BattleActionCreator.Logger = logger;
 
                 battleActionController.Click += OnClickBattleActionController;
                 
@@ -95,7 +97,7 @@ namespace Code.UI
         {
             var battleActionController = (BattleActionController) sender;
 
-            var eventArgs = new CreateBattleActionEventArgs(Player, battleActionController.BattleActionCreator);
+            var eventArgs = new CreateBattleActionEventArgs(playerSide, battleActionController.BattleActionCreator);
             
             CreateBattleAction?.Invoke(this, eventArgs);
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Battle;
+using Code.Battle.Core;
 using Code.Utils;
 using UnityEngine;
 
@@ -21,13 +22,19 @@ namespace Code
 
         public bool Destroyed { get; private set; }
 
-        public float Heath => _health;
+        public float Health => _health;
 
         public float Energy => _energy;
+
+        public float MaxHealth => _maxHealth;
+
+        public float MaxEnergy => _maxEnergy;
+
+        [SerializeField]
+        private float _maxHealth;
         
-        public float MaxHealth;
-        
-        public float MaxEnergy;
+        [SerializeField]
+        private float _maxEnergy;
 
         [SerializeField] 
         private PlayerSide _playerSide;
@@ -42,7 +49,7 @@ namespace Code
         private GunController _gunController;
 
         private bool _zoneTaken;
-        private bool _shotFinihsed;
+        private bool _shotFinished;
 
         private float _health;
         private float _energy;
@@ -88,14 +95,14 @@ namespace Code
 
         public void SimpleShot(IBattleZoneField target, float damage)
         {
-            _shotFinihsed = false;
+            _shotFinished = false;
             
             _gunController.SimpleShot(target, damage);
         }
 
         public void DirectionShot(IBattleZoneField target, float damage)
         {
-            _shotFinihsed = false;
+            _shotFinished = false;
             
             _gunController.DirectionShot(target, damage);
         }
@@ -132,21 +139,23 @@ namespace Code
         {
             if (!_zoneTaken)
             {
+                transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * _changeZoneSpeed);
+                
                 if (transform.localPosition.magnitude < 0.1f)
                 {
-                    ChangeBattleZoneFinished?.Invoke(this, EventArgs.Empty);
+                    transform.localPosition = Vector3.zero;
                 
                     _zoneTaken = true;
+                    
+                    ChangeBattleZoneFinished?.Invoke(this, EventArgs.Empty);
                 }
-                
-                transform.localPosition = Vector3.Lerp(transform.localPosition, Vector3.zero, Time.deltaTime * _changeZoneSpeed);
             }
 
-            if (!_shotFinihsed)
+            if (!_shotFinished)
             {
                 if (!_gunController.ActionInProcess)
                 {
-                    _shotFinihsed = true;
+                    _shotFinished = true;
                     
                     ShotFinished?.Invoke(this, EventArgs.Empty);
                 }

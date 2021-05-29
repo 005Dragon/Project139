@@ -697,9 +697,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 319668028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8c67b3dce3246f6911e293f8d197ccf, type: 3}
+  m_Script: {fileID: 11500000, guid: 5e4adf805651403fab57bedc8c32ce0b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _battleActionTemplates:
+  - {fileID: 2956221343200234605, guid: 7d7acb31c914110458f7ddcb603752b0, type: 3}
+  - {fileID: 2945009484056716096, guid: 1a2a93a40a8a98248ad54c036ca91367, type: 3}
+  - {fileID: 5021897899082583259, guid: 404247b0d2616854682de41d396e15a2, type: 3}
+  - {fileID: 687945281585068340, guid: 8038bbef269502c41a90ce38b59092a9, type: 3}
+  - {fileID: 4184347731140009623, guid: 582444356f71df247a52808c0fcadb23, type: 3}
 --- !u!1 &333261186
 GameObject:
   m_ObjectHideFlags: 0
@@ -1383,7 +1389,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 626740438}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 24d401b12c034c89a9bb9f150828677c, type: 3}
+  m_Script: {fileID: 11500000, guid: 985c68b558ef48a38ec899605696b73e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &626740441
@@ -1815,9 +1821,8 @@ GameObject:
   m_Component:
   - component: {fileID: 801016966}
   - component: {fileID: 801016969}
-  - component: {fileID: 801016967}
   - component: {fileID: 801016968}
-  - component: {fileID: 801016970}
+  - component: {fileID: 801016967}
   m_Layer: 0
   m_Name: BattleUi
   m_TagString: Untagged
@@ -1853,7 +1858,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 801016965}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2ad0f7b5cde57384dac6571c7cbd692a, type: 3}
+  m_Script: {fileID: 11500000, guid: 7d1de6dc769f404d9be1e8f985fe6ab3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!114 &801016968
@@ -1870,9 +1875,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayersSettings:
   - playerSide: 0
-    PlayerManagementType: 2
+    PlayerManagementType: 1
   - playerSide: 1
-    PlayerManagementType: 2
+    PlayerManagementType: 0
   BattleActionTemplates:
   - {fileID: 687945281585068340, guid: 8038bbef269502c41a90ce38b59092a9, type: 3}
   - {fileID: 2956221343200234605, guid: 7d7acb31c914110458f7ddcb603752b0, type: 3}
@@ -1896,18 +1901,6 @@ MonoBehaviour:
   _shipControllers:
   - {fileID: 927990525}
   - {fileID: 1441481467}
---- !u!114 &801016970
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 801016965}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8cb33de0034b4aba85e3c08a30c38cff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &804602149
 GameObject:
   m_ObjectHideFlags: 0
@@ -2081,7 +2074,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 10
-  MaxEnergy: 2
+  _maxEnergy: 2
   _playerSide: 0
   _changeZoneSpeed: 2
   battleZoneDescription: {fileID: 1784227552}
@@ -2841,6 +2834,7 @@ GameObject:
   - component: {fileID: 1281920633}
   - component: {fileID: 1281920632}
   - component: {fileID: 1281920631}
+  - component: {fileID: 1281920634}
   m_Layer: 5
   m_Name: Play
   m_TagString: Untagged
@@ -2912,9 +2906,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 626740440}
-        m_TargetAssemblyTypeName: Code.UI.BattleActionLineUiController, Assembly-CSharp
-        m_MethodName: Ready
+      - m_Target: {fileID: 1281920634}
+        m_TargetAssemblyTypeName: Code.Battle.UI.BattlePlayerReadyController, Assembly-CSharp
+        m_MethodName: SetReady
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2962,6 +2956,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281920629}
   m_CullTransparentMesh: 1
+--- !u!114 &1281920634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281920629}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca1c2c9409c446d4aeb0c6e6bb1c5ab5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1370242315
 GameObject:
   m_ObjectHideFlags: 0
@@ -3170,7 +3176,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MaxHealth: 10
-  MaxEnergy: 2
+  _maxEnergy: 2
   _playerSide: 1
   _changeZoneSpeed: 2
   battleZoneDescription: {fileID: 1784227552}
@@ -4119,7 +4125,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 626740440}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: Code.UI.BattleActionLineUiController, Assembly-CSharp
         m_MethodName: RevertAction
         m_Mode: 1

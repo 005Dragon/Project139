@@ -26,7 +26,7 @@ namespace Code.UI.BattleUiController
 
             BattleStatsBarController statsController = _battleStatsUiController.GetStats(shipController.PlayerSide);
             
-            statsController.SetHealth(shipController.Heath);
+            statsController.SetHealth(shipController.Health);
         }
         
         private void OnShipControllerEnergyChange(object sender, EventArgs e)

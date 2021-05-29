@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Code.Battle;
-using Code.Battle.Actions;
+using Code.Battle.Core;
+using Code.Battle.Core.Actions;
 using UnityEngine;
 using UnityEngine.UI;
 

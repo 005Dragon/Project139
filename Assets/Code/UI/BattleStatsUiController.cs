@@ -30,7 +30,7 @@ namespace Code.UI
             {
                  ShipController shipController = ReferenceItems.ShipControllers.First(x => x.PlayerSide == statsBarController.PlayerSide);
                 
-                statsBarController.Build(shipController);
+                statsBarController.Build(shipController.MaxHealth, shipController.MaxEnergy);
             }
         }
 

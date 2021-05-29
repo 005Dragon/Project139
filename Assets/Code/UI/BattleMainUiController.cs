@@ -15,7 +15,7 @@ namespace Code.UI
         {
             foreach (BarController barController in _barControllers)
             {
-                barController.Build(ReferenceItems.BattleSettings.BattleActionTemplates);    
+                barController.Build(ReferenceItems.BattleSettings.BattleActionTemplates, null);
             }
         }
 

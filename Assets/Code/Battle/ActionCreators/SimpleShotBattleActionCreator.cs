@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Code.Battle.Actions;
+using Code.Battle.Core;
+using Code.Battle.Core.Actions;
 using UnityEngine;
 
 namespace Code.Battle.ActionCreators
 {
     public class SimpleShotBattleActionCreator : BattleActionCreatorBase, ITargetBattleActionCreator
     {
+        public override BattleActionId ActionId => BattleActionId.SimpleShot;
+        
         [SerializeField]
         public int _damage;
         

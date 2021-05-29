@@ -1,4 +1,5 @@
-﻿using Code.UI.ProgressBar;
+﻿using Code.Battle.Core;
+using Code.UI.ProgressBar;
 using UnityEngine;
 
 namespace Code.UI
@@ -13,10 +14,10 @@ namespace Code.UI
         [SerializeField]
         private ProgressBarController _EnergyBar;
 
-        public void Build(ShipController shipController)
+        public void Build(float maxHealth, float maxEnergy)
         {
-            _healthBar.Build(shipController.Heath);
-            _EnergyBar.Build(shipController.Energy);
+            _healthBar.Build(maxHealth);
+            _EnergyBar.Build(maxEnergy);
         }
 
         public void SetHealth(float value)

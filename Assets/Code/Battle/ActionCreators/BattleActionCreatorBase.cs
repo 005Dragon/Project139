@@ -1,11 +1,14 @@
-﻿using Code.Battle.Actions;
-using Code.Battle.Log;
+﻿using Code.Battle.Core;
+using Code.Battle.Core.Actions;
+using Code.Battle.Core.Log;
 using UnityEngine;
 
 namespace Code.Battle.ActionCreators
 {
     public abstract class BattleActionCreatorBase : MonoBehaviour, IBattleActionCreator
     {
+        public abstract BattleActionId ActionId { get; }
+        
         public IBattleLogger Logger { get; set; }
         
         public PlayerSide PlayerSide { get; set; }

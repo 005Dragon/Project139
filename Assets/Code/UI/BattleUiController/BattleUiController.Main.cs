@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Code.Battle.ActionCreators;
-using Code.Battle.Actions;
+using Code.Battle.Core;
+using Code.Battle.Core.Actions;
 
 namespace Code.UI.BattleUiController
 {
