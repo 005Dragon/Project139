@@ -20,6 +20,7 @@ namespace Code.Battle.UI
         [SerializeField]
         private GameObject _enemyTargetGlowTemplate;
 
+        private PlayerSide _playerSide;
         private IBattleZone _battleZone;
         private ITargetBattleActionCreator _targetBattleActionCreator;
         
@@ -43,6 +44,7 @@ namespace Code.Battle.UI
 
         public void Build(PlayerSide managedPlayerSide, IBattleZone battleZone)
         {
+            _playerSide = managedPlayerSide;
             _battleZone = battleZone;
             
             _canvas.enabled = true;
@@ -82,7 +84,7 @@ namespace Code.Battle.UI
 
         private void UpdateVisibleGlows(IBattleZone battleZone)
         {
-            List<IBattleZoneField> enableTargets = _targetBattleActionCreator.GetEnableTargets(battleZone).ToList();
+            List<IBattleZoneField> enableTargets = _targetBattleActionCreator.GetEnableTargets(_playerSide, battleZone).ToList();
 
             foreach (TargetGlowController targetGlowController in _targetGlowControllers)
             {

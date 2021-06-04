@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using Code.Battle.Core;
-using Code.UI;
+using Code.Services;
 using UnityEngine;
 
 namespace Code.Battle.UI
 {
     public class BattleUiController : MonoBehaviour
     {
-        private IBattleReferenceItems ReferenceItems => _referenceItemsController.ReferenceItems;
-        
         private BattleEngine _battleEngine;
         
-        private ReferenceItemsController _referenceItemsController;
-
         private BattleActionLineUiController _battleActionLineUiController;
         private BattleActionBarController _battleActionBarController;
         private BattleSelectTargetUiController _battleSelectTargetUiController;
@@ -32,8 +28,6 @@ namespace Code.Battle.UI
 
         private void Initialize()
         {
-            _referenceItemsController = GetComponent<ReferenceItemsController>();
-            
             _battleActionLineUiController = GetComponentInChildren<BattleActionLineUiController>();
             _battleSelectTargetUiController = GetComponentInChildren<BattleSelectTargetUiController>();
             
@@ -44,7 +38,7 @@ namespace Code.Battle.UI
             
             _battleStatsUiController = GetComponentInChildren<BattleStatsUiController>();
 
-            foreach (ShipController ship in ReferenceItems.ShipControllers)
+            foreach (IBattleShip ship in Service.BattleShipsService.GetBattleShips())
             {
                 ship.HealthChange += OnShipHealthChange;
                 ship.EnergyChange += OnShipEnergyChange;
@@ -52,10 +46,10 @@ namespace Code.Battle.UI
             
             _battleEngine = new BattleEngine(
                 CreatePlayers().ToArray(),
-                ReferenceItems.ShipControllers.Select(x => (IBattleShip) x).ToArray(),
-                ReferenceItems.BattleZoneDescription,
+                Service.BattleShipsService.GetBattleShips().ToArray(),
+                Service.BattleZone,
                 _battleActionLineUiController.BattleActionQueues,
-                _battleActionBarController.GetAllBattleActionCreators().ToArray(),
+                Service.BattleActionCreatorService.GetBattleActionCreators().ToArray(),
                 new BattleLogger()
             );
             
@@ -64,30 +58,27 @@ namespace Code.Battle.UI
 
         private void Build()
         {
-            if (ReferenceItems.BattleSettings.ManagedPlayer != null)
+            if (Service.BattleSettingsService.TryGetManagedPlayer(out PlayerSide managedPlayerSide))
             {
-                _battleSelectTargetUiController.Build(
-                    (PlayerSide) ReferenceItems.BattleSettings.ManagedPlayer,
-                    ReferenceItems.BattleZoneDescription
-                );
+                _battleSelectTargetUiController.Build(managedPlayerSide, Service.BattleZone);
             }
 
-            _battleStatsUiController.Build(ReferenceItems.ShipControllers.Select(x => (IBattleShip) x).ToArray());
+            _battleStatsUiController.Build(Service.BattleShipsService.GetBattleShips().ToArray());
         }
 
         private IEnumerable<IBattlePlayer> CreatePlayers()
         {
             var battlePlayerCreator = new BattlePlayerCreator(
                 new UnityRandom(),
-                ReferenceItems.BattleZoneDescription,
+                Service.BattleZone,
                 _battleActionBarController,
                 _playerReadyController,
-                ReferenceItems.ShipControllers.Select(x => (IBattleShip)x).ToArray()
+                Service.BattleShipsService.GetBattleShips().ToArray()
             );
 
-            foreach (BattleSettings.PlayerSettings playerSettings in ReferenceItems.BattleSettings.PlayersSettings)
+            foreach (PlayerSide playerSide in Utils.EnumExtensions.GetAllValues<PlayerSide>())
             {
-                yield return battlePlayerCreator.Create(playerSettings.playerSide, playerSettings.PlayerManagementType);
+                yield return battlePlayerCreator.Create(playerSide, Service.BattleSettingsService.GetPlayerManagementType(playerSide));
             }
         }
         

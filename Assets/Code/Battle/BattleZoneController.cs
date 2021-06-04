@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Code.Battle
 {
-    public class BattleZoneDescription : MonoBehaviour, IBattleZone
+    public class BattleZoneController : MonoBehaviour, IBattleZone
     {
         [Serializable]
         private class PlayerBattleZones

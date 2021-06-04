@@ -1,5 +1,6 @@
 ﻿using System;
 using Code.Battle.Core;
+using Code.Services;
 using Code.Utils;
 using UnityEngine;
 
@@ -40,9 +41,6 @@ namespace Code.Battle
         
         [SerializeField]
         private float _changeZoneSpeed = 2f;
-    
-        [SerializeField] 
-        private BattleZoneDescription battleZoneDescription;
 
         private DestroyController _destroyController;
         private GunController _gunController;
@@ -78,7 +76,7 @@ namespace Code.Battle
         {
             _zoneTaken = false;
             
-            if (battleZoneDescription.TryGetRelativeBattleZoneFieldByDirection(PlayerSide, direction, out IBattleZoneField battleZoneField))
+            if (Service.BattleZone.TryGetRelativeBattleZoneFieldByDirection(PlayerSide, direction, out IBattleZoneField battleZoneField))
             {
                 transform.parent = ((BattleZoneField)battleZoneField).Transform;
 
@@ -110,8 +108,6 @@ namespace Code.Battle
         
         private void Awake()
         {
-            transform.parent = battleZoneDescription.GetCurrentBattleZone(transform.position);
-
             _destroyController = GetComponentInChildren<DestroyController>();
             _destroyController.Finished += OnDestroyControllerFinished;
             
@@ -120,6 +116,11 @@ namespace Code.Battle
 
             _health = MaxHealth;
             _energy = MaxEnergy;
+        }
+
+        private void Start()
+        {
+            transform.parent = ((BattleZoneController)Service.BattleZone).GetCurrentBattleZone(transform.position);
         }
 
         private void OnGunControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)

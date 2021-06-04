@@ -11,12 +11,8 @@ namespace Code.Battle.ActionCreators
         
         public IBattleLogger Logger { get; set; }
         
-        public PlayerSide PlayerSide { get; set; }
-
         public BattleActionType ActionType => _actionType;
         
-        public Sprite Sprite { get; set; }
-
         public float EnergyCost => _energyCost;
 
         [SerializeField]
@@ -25,6 +21,6 @@ namespace Code.Battle.ActionCreators
         [SerializeField]
         private float _energyCost;
 
-        public abstract BattleAction Create();
+        public abstract BattleAction Create(PlayerSide playerSide);
     }
 }

@@ -9,6 +9,6 @@ namespace Code.Battle.ActionCreators
         
         [SerializeField] private float _damage;
         
-        public override BattleAction Create() => new DirectShotBattleAction(this, _damage);
+        public override BattleAction Create(PlayerSide playerSide) => new DirectShotBattleAction(playerSide, this, _damage);
     }
 }

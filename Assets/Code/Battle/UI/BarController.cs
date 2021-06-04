@@ -16,16 +16,17 @@ namespace Code.Battle.UI
         
         private TabController[] _tabControllers;
 
-        public void Build(IEnumerable<GameObject> battleActionTemplates, IBattleLogger logger)
+        public void Build(GameObject battleActionTemplate, IEnumerable<IBattleActionCreator> battleActionCreators)
         {
-            List<BattleActionController> battleActionControllers = CreateBattleActions(battleActionTemplates, logger).ToList();
-
+            List<BattleActionController> battleActionControllers =
+                CreateBattleActions(battleActionTemplate, battleActionCreators).ToList();
+            
             foreach (TabController tabController in _tabControllers)
             {
                 tabController.Build(battleActionControllers.Where(x => x.BattleActionCreator.ActionType == tabController.BattleActionType));
             }
         }
-        
+
         public void ResetTabs()
         {
             foreach (TabController tabController in _tabControllers)
@@ -76,19 +77,21 @@ namespace Code.Battle.UI
             }
         }
 
-        private IEnumerable<BattleActionController> CreateBattleActions(IEnumerable<GameObject> battleActionTemplates, IBattleLogger logger)
+        private IEnumerable<BattleActionController> CreateBattleActions(
+            GameObject battleActionTemplate,
+            IEnumerable<IBattleActionCreator> battleActionCreators)
         {
-            foreach (GameObject template in battleActionTemplates)
+            foreach (IBattleActionCreator battleActionCreator in battleActionCreators)
             {
-                GameObject battleActionGameObject = Instantiate(template);
+                GameObject battleActionGameObject = Instantiate(battleActionTemplate);
 
                 var battleActionController = battleActionGameObject.GetComponent<BattleActionController>();
 
                 battleActionController.PlayerSide = playerSide;
-                battleActionController.BattleActionCreator.Logger = logger;
+                battleActionController.BattleActionCreator = battleActionCreator;
 
                 battleActionController.Click += OnClickBattleActionController;
-                
+
                 battleActionController.Initialize();
 
                 yield return battleActionController;

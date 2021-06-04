@@ -6,6 +6,6 @@ namespace Code.Battle.ActionCreators
     {
         public override BattleActionId ActionId => BattleActionId.MoveUp;
         
-        public override BattleAction Create() => new MoveUpAction(this);
+        public override BattleAction Create(PlayerSide playerSide) => new MoveUpAction(playerSide, this);
     }
 }

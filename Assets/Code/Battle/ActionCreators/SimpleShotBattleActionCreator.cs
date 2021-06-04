@@ -15,11 +15,11 @@ namespace Code.Battle.ActionCreators
         
         private IBattleZoneField _target;
         
-        public override BattleAction Create() => new SimpleShotBattleAction(this, _target, _damage);
+        public override BattleAction Create(PlayerSide playerSide) => new SimpleShotBattleAction(playerSide, this, _target, _damage);
         
-        public IEnumerable<IBattleZoneField> GetEnableTargets(IBattleZone battleZone)
+        public IEnumerable<IBattleZoneField> GetEnableTargets(PlayerSide playerSide, IBattleZone battleZone)
         {
-            return battleZone.GetBattleZoneFields().Where(x => x.PlayerSide != PlayerSide);
+            return battleZone.GetBattleZoneFields().Where(x => x.PlayerSide != playerSide);
         }
 
         public void SetTargets(IEnumerable<IBattleZoneField> targets)

@@ -6,6 +6,6 @@ namespace Code.Battle.ActionCreators
     {
         public override BattleActionId ActionId => BattleActionId.Wait;
         
-        public override BattleAction Create() => new WaitAction(this);
+        public override BattleAction Create(PlayerSide playerSide) => new WaitAction(playerSide, this);
     }
 }

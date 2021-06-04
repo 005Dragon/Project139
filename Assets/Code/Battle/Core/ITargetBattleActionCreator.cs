@@ -6,6 +6,6 @@ namespace Code.Battle.Core
     {
         public void SetTargets(IEnumerable<IBattleZoneField> targets);
 
-        public IEnumerable<IBattleZoneField> GetEnableTargets(IBattleZone battleZone);
+        public IEnumerable<IBattleZoneField> GetEnableTargets(PlayerSide playerSide, IBattleZone battleZone);
     }
 }

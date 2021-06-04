@@ -71,39 +71,41 @@ namespace Code.Battle.Core
 
         private void OnCreateBattleAction(object sender, EventArgs<IBattleActionCreator> eventArgs)
         {
-            TryCreateBattleAction(eventArgs.Value);
+            var player = (IBattlePlayer) sender;
+            
+            TryCreateBattleAction(player.PlayerSide, eventArgs.Value);
         }
         
-        private bool TryCreateBattleAction(IBattleActionCreator creator)
+        private bool TryCreateBattleAction(PlayerSide playerSide, IBattleActionCreator creator)
         {
-            if (!CanCreateBattleAction(creator))
+            if (!CanCreateBattleAction(playerSide, creator))
             {
                 return false;
             }
             
-            CreateBattleAction(creator);
+            CreateBattleAction(playerSide, creator);
 
             return true;
         }
         
-        private bool CanCreateBattleAction(IBattleActionCreator creator)
+        private bool CanCreateBattleAction(PlayerSide playerSide, IBattleActionCreator creator)
         {
             float energyCost = creator.EnergyCost;
 
-            IBattleShip ship = _ships.First(x => x.PlayerSide == creator.PlayerSide);
+            IBattleShip ship = _ships.First(x => x.PlayerSide == playerSide);
             
             return energyCost <= ship.Energy;
         }
         
-        private void CreateBattleAction(IBattleActionCreator creator)
+        private void CreateBattleAction(PlayerSide playerSide, IBattleActionCreator creator)
         {
-            BattleAction battleAction = creator.Create();
+            BattleAction battleAction = creator.Create(playerSide);
 
-            IBattleShip ship = _ships.First(x => x.PlayerSide == creator.PlayerSide);
+            IBattleShip ship = _ships.First(x => x.PlayerSide == playerSide);
             
             ship.SetEnergy(ship.Energy - battleAction.EnergyCost);
 
-            IBattleActionQueue actionQueue = _battleActionQueues.First(x => x.PlayerSide == creator.PlayerSide);
+            IBattleActionQueue actionQueue = _battleActionQueues.First(x => x.PlayerSide == playerSide);
             
             actionQueue.Enqueue(battleAction);
             

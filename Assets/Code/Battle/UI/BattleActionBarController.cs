@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Code.Battle.Core;
-using Code.UI;
 using System;
 using System.Linq;
 using Code.Battle.Core.UI;
@@ -20,8 +19,8 @@ namespace Code.Battle.UI
         }
 
         [SerializeField]
-        private GameObject[] _battleActionTemplates;
-
+        private GameObject _battleActionTemplate;
+        
         private BarController[] _barControllers;
         private BarController _activeBarController;
 
@@ -35,11 +34,6 @@ namespace Code.Battle.UI
 
             _battleSelectTargetUiController.Apply += OnBattleSelectTargetApply;
             _battleSelectTargetUiController.Cancel += OnBattleSelectTargetCancel;
-        } 
-
-        public IEnumerable<IBattleActionCreator> GetAllBattleActionCreators()
-        {
-            return _battleActionTemplates.Select(x => x.GetComponent<BattleActionController>().BattleActionCreator);
         }
         
         public void AddEnableBattleActionCreators(PlayerSide playerSide, IEnumerable<IBattleActionCreator> battleActionCreators)
@@ -51,11 +45,8 @@ namespace Code.Battle.UI
                 if (barController.playerSide == playerSide)
                 {
                     _activeBarController = barController;
-                    
-                    _activeBarController.Build(
-                        GetEnableBattleActionTemplates(battleActionCreatorsArray),
-                        battleActionCreatorsArray.First().Logger
-                    );
+
+                    _activeBarController.Build(_battleActionTemplate, battleActionCreatorsArray);
                     
                     _activeBarController.CreateBattleAction += OnCreateBattleAction;
                 }
@@ -86,30 +77,7 @@ namespace Code.Battle.UI
                 CreateBattleAction?.Invoke(this, eventArgs);                
             }
         }
-        
-        private IEnumerable<GameObject> GetEnableBattleActionTemplates(IEnumerable<IBattleActionCreator> enableBattleActionCreators)
-        {
-            Dictionary<BattleActionController, GameObject> controllerToTemplateIndex = new Dictionary<BattleActionController, GameObject>();
 
-            foreach (GameObject template in _battleActionTemplates)
-            {
-                controllerToTemplateIndex.Add(template.GetComponent<BattleActionController>(), template);
-            }
-
-            foreach (IBattleActionCreator enableBattleActionCreator in enableBattleActionCreators)
-            {
-                if (controllerToTemplateIndex.Keys.All(x => x.BattleActionCreator.ActionId != enableBattleActionCreator.ActionId))
-                {
-                    continue;
-                }
-                
-                KeyValuePair<BattleActionController, GameObject> controllerTemplatePair =
-                    controllerToTemplateIndex.First(x => x.Key.BattleActionCreator.ActionId == enableBattleActionCreator.ActionId);
-
-                yield return controllerTemplatePair.Value;
-            }
-        }
-        
         private void OnBattleSelectTargetCancel(object sender, EventArgs eventArgs)
         {
             _canvas.enabled = true;

@@ -54,11 +54,9 @@ namespace Code.Battle.Core.Players
         {
             IBattleActionCreator actionCreator = _battleActionCreators[_random.Range(0, _battleActionCreators.Length)];
 
-            actionCreator.PlayerSide = PlayerSide;
-            
             if (actionCreator is ITargetBattleActionCreator targetBattleActionCreator)
             {
-                IBattleZoneField[] enableTargets = targetBattleActionCreator.GetEnableTargets(_battleZone).ToArray();
+                IBattleZoneField[] enableTargets = targetBattleActionCreator.GetEnableTargets(PlayerSide, _battleZone).ToArray();
 
                 IBattleZoneField target = enableTargets[_random.Range(0, enableTargets.Length)];
                 

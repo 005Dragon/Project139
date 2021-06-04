@@ -2,6 +2,7 @@
 using System.Linq;
 using Code.Battle.Core;
 using Code.Battle.Core.Actions;
+using Code.Services;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -29,7 +30,7 @@ namespace Code.Battle.UI
 
         public float MinDistanceToLerp;
 
-        public IEnumerable<BattleAction> BattleActionModels => QueueItems.Select(x => x.Action);
+        public IEnumerable<BattleAction> BattleActionModels => _queueItems.Select(x => x.Action);
 
         [SerializeField]
         private PlayerSide _playerSide;
@@ -46,29 +47,29 @@ namespace Code.Battle.UI
         [SerializeField]
         private GameObject _queueItemTemplate;
         
-        private readonly Queue<BattleActionQueueItemPair> QueueItems = new Queue<BattleActionQueueItemPair>();
+        private readonly Queue<BattleActionQueueItemPair> _queueItems = new Queue<BattleActionQueueItemPair>();
 
         private bool _allSleep = true;
-
+        
         public void Enqueue(BattleAction action)
         {
             GameObject queueItemGameObject = Instantiate(_queueItemTemplate, _startPositionQueue.position, Quaternion.identity, _queue);
 
-            queueItemGameObject.GetComponent<Image>().sprite = action.Sprite;
+            queueItemGameObject.GetComponent<Image>().sprite = Service.BattleActionImageService.GetSprite(action.Id);
             
-            QueueItems.Enqueue(new BattleActionQueueItemPair(action, queueItemGameObject.transform));
+            _queueItems.Enqueue(new BattleActionQueueItemPair(action, queueItemGameObject.transform));
             
             _allSleep = false;
         }
 
         public BattleAction Dequeue()
         {
-            if (QueueItems.Count == 0)
+            if (_queueItems.Count == 0)
             {
                 return null;
             }
             
-            BattleActionQueueItemPair pair = QueueItems.Dequeue();
+            BattleActionQueueItemPair pair = _queueItems.Dequeue();
 
             Destroy(pair.QueueItemTransform.gameObject);
             
@@ -84,7 +85,7 @@ namespace Code.Battle.UI
                 _allSleep = true;
                 
                 int index = 0;
-                foreach (BattleActionQueueItemPair item in QueueItems)
+                foreach (BattleActionQueueItemPair item in _queueItems)
                 {
                     bool needMove = GetNeedMoveQueueItem(item.QueueItemTransform, index++, out Vector2 targetPosition);
 

@@ -9,7 +9,7 @@ namespace Code.Battle.Core.Actions
         private IBattleZoneField _currentBattleZoneField;
         private bool _battleZoneChanged;
         
-        public MoveUpAction(IBattleActionCreator creator) : base(creator)
+        public MoveUpAction(PlayerSide playerSide, IBattleActionCreator creator) : base(playerSide, creator)
         {
         }
 

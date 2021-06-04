@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 3074257303471861478}
   - component: {fileID: 3074257303471861477}
   - component: {fileID: 3074257303471861476}
+  - component: {fileID: -6634858502736368955}
   m_Layer: 5
   m_Name: ButtonAction
   m_TagString: Untagged
@@ -196,9 +197,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: Code.UI.LeftTabController, Assembly-CSharp
-        m_MethodName: Activate
+      - m_Target: {fileID: -6634858502736368955}
+        m_TargetAssemblyTypeName: Code.Battle.UI.BattleActionController, Assembly-CSharp
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -208,3 +209,16 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &-6634858502736368955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3074257303471861474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e9a4a5d4e14e9743b3af32ac7524d7b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Image: {fileID: 3074257302546658510}
