@@ -1,6 +1,6 @@
-﻿using Code.Battle.Core;
-using Code.Battle.Core.Actions;
-using Code.Battle.Core.Log;
+﻿using BattleCore;
+using BattleCore.Actions;
+using BattleCore.Log;
 using UnityEngine;
 
 namespace Code.Battle.ActionCreators

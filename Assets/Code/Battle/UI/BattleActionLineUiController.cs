@@ -1,6 +1,5 @@
 ﻿using System.Linq;
-using Code.Battle.Core;
-using Code.UI;
+using BattleCore;
 using UnityEngine;
 
 namespace Code.Battle.UI

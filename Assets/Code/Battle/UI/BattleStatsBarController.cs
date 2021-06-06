@@ -1,4 +1,5 @@
-﻿using Code.UI.ProgressBar;
+﻿using BattleCore;
+using Code.UI.ProgressBar;
 using UnityEngine;
 
 namespace Code.Battle.UI

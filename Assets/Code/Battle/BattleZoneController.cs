@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Code.Battle.Core;
-using Code.Utils;
+using BattleCore;
+using BattleCore.Utils;
 using UnityEngine;
 
 namespace Code.Battle
@@ -30,7 +30,7 @@ namespace Code.Battle
                 }
             }
         }
-        
+
         public Transform GetCurrentBattleZone(Vector2 position)
         {
             int minRangeZoneId = 0;

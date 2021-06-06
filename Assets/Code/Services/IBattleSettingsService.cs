@@ -1,4 +1,5 @@
-﻿using Code.Battle;
+﻿using BattleCore;
+using Code.Battle;
 
 namespace Code.Services
 {

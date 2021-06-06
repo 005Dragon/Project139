@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Code.Battle.Core;
+using BattleCore;
 
 namespace Code.Services
 {

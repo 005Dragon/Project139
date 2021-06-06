@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using BattleCore;
+using UnityEngine;
 
-namespace Code.Battle.Core
+namespace Code.Battle
 {
     public class BattleZoneField : IBattleZoneField
     {

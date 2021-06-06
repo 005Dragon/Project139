@@ -1,0 +1,8 @@
+A:\Projects\Project139\Git\Project139\BattleCore\bin\Debug\BattleCore.dll
+A:\Projects\Project139\Git\Project139\BattleCore\bin\Debug\BattleCore.pdb
+A:\Projects\Project139\Git\Project139\BattleCore\obj\Debug\BattleCore.csprojAssemblyReference.cache
+A:\Projects\Project139\Git\Project139\BattleCore\obj\Debug\BattleCore.csproj.CoreCompileInputs.cache
+A:\Projects\Project139\Git\Project139\BattleCore\obj\Debug\BattleCore.dll
+A:\Projects\Project139\Git\Project139\BattleCore\obj\Debug\BattleCore.pdb
+A:\Projects\Project139\Git\Project139\Assets\Plagins\BattleCore.dll
+A:\Projects\Project139\Git\Project139\Assets\Plagins\BattleCore.pdb

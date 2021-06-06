@@ -1,5 +1,5 @@
 using System;
-using Code.Battle.Core;
+using BattleCore;
 using Code.Services;
 using UnityEngine;
 using UnityEngine.UI;

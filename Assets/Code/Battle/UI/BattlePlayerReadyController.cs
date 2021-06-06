@@ -1,5 +1,5 @@
 ﻿using System;
-using Code.Battle.Core.UI;
+using BattleCore.UI;
 using UnityEngine;
 
 namespace Code.Battle.UI

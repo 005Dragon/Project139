@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
-using Code.Battle.Core;
 using System;
 using System.Linq;
-using Code.Battle.Core.UI;
-using Code.Utils;
+using BattleCore;
+using BattleCore.UI;
+using BattleCore.Utils;
 using UnityEngine;
 
 namespace Code.Battle.UI

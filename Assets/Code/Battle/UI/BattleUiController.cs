@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Code.Battle.Core;
+using BattleCore;
+using BattleCore.Utils;
 using Code.Services;
 using UnityEngine;
 
@@ -76,7 +77,7 @@ namespace Code.Battle.UI
                 Service.BattleShipsService.GetBattleShips().ToArray()
             );
 
-            foreach (PlayerSide playerSide in Utils.EnumExtensions.GetAllValues<PlayerSide>())
+            foreach (PlayerSide playerSide in EnumExtensions.GetAllValues<PlayerSide>())
             {
                 yield return battlePlayerCreator.Create(playerSide, Service.BattleSettingsService.GetPlayerManagementType(playerSide));
             }

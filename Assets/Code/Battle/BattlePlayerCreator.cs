@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Linq;
-using Code.Battle.Core;
-using Code.Battle.Core.Players;
-using Code.Battle.Core.UI;
+using BattleCore;
+using BattleCore.Players;
+using BattleCore.UI;
 
 namespace Code.Battle
 {

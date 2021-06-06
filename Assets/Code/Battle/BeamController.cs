@@ -1,5 +1,5 @@
 ﻿using System;
-using Code.Battle.Core;
+using BattleCore;
 using Unity.Mathematics;
 using UnityEngine;
 

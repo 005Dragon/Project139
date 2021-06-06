@@ -1,4 +1,4 @@
-﻿using Code.Battle.Core.Actions;
+﻿using BattleCore.Actions;
 using UnityEngine;
 
 namespace Code.Services

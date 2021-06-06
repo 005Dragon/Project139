@@ -1,7 +1,7 @@
 ﻿using System;
-using Code.Battle.Core;
+using BattleCore;
+using BattleCore.Utils;
 using Code.Services;
-using Code.Utils;
 using UnityEngine;
 
 namespace Code.Battle
