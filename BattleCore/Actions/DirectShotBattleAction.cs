@@ -10,7 +10,7 @@ namespace BattleCore.Actions
 
         private float _totalDamage;
         
-        public DirectShotBattleAction(IBattleActionCreator creator, float damage) : base(creator)
+        public DirectShotBattleAction(PlayerSide playerSide, IBattleActionCreator creator, float damage) : base(playerSide, creator)
         {
             Damage = damage;
         }

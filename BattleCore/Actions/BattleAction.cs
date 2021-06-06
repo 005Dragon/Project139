@@ -24,9 +24,9 @@ namespace BattleCore.Actions
         
         protected IBattleZone BattleZone { get; private set; }
 
-        protected BattleAction(IBattleActionCreator creator)
+        protected BattleAction(PlayerSide playerSide, IBattleActionCreator creator)
         {
-            PlayerSide = creator.PlayerSide;
+            PlayerSide = playerSide;
             ActionType = creator.ActionType;
             EnergyCost = creator.EnergyCost;
             Logger = creator.Logger;

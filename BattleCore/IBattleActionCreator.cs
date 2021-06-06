@@ -11,10 +11,8 @@ namespace BattleCore
         
         IBattleLogger Logger { get; set; }
         
-        PlayerSide PlayerSide { get; set; }
-        
         float EnergyCost { get; }
         
-        BattleAction Create();
+        BattleAction Create(PlayerSide playerSide);
     }
 }

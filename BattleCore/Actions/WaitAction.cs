@@ -4,7 +4,7 @@ namespace BattleCore.Actions
 {
     public class WaitAction : BattleAction
     {
-        public WaitAction(IBattleActionCreator creator) : base(creator)
+        public WaitAction(PlayerSide playerSide, IBattleActionCreator creator) : base(playerSide, creator)
         {
         }
 

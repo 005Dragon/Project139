@@ -1,4 +1,4 @@
-﻿﻿namespace BattleCore
+﻿namespace BattleCore
 {
     public enum PlayerSide
     {

@@ -12,7 +12,8 @@ namespace BattleCore.Actions
 
         private float _totalDamage;
 
-        public SimpleShotBattleAction(IBattleActionCreator creator, IBattleZoneField target, float damage) : base(creator)
+        public SimpleShotBattleAction(PlayerSide playerSide, IBattleActionCreator creator, IBattleZoneField target, float damage) 
+            : base(playerSide, creator)
         {
             ZoneField = target;
             Damage = damage;

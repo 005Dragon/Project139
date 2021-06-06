@@ -8,7 +8,7 @@ namespace BattleCore.Actions
         private IBattleZoneField _currentBattleZoneField;
         private bool _battleZoneChanged;
         
-        public MoveDownAction(IBattleActionCreator creator) : base(creator)
+        public MoveDownAction(PlayerSide playerSide, IBattleActionCreator creator) : base(playerSide, creator)
         {
         }
 
