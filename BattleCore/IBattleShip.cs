@@ -8,7 +8,7 @@ namespace BattleCore
         event EventHandler HealthChange;
         event EventHandler EnergyChange;
         event EventHandler ShipDestroy;
-        event EventHandler<EventArgs<ShotModel>> Shot;
+        event EventHandler<EventArgs<IShotModel>> Shot;
         event EventHandler ChangeBattleZoneFinished;
         event EventHandler ShotFinished;
         

@@ -14,7 +14,7 @@ namespace Code.Battle
 
         public event EventHandler EnergyChange;
 
-        public event EventHandler<EventArgs<ShotModel>> Shot;
+        public event EventHandler<EventArgs<IShotModel>> Shot;
         public event EventHandler ChangeBattleZoneFinished;
         public event EventHandler ShotFinished;
 
@@ -125,7 +125,7 @@ namespace Code.Battle
 
         private void OnGunControllerShotFinished(object sender, EventArgs<ShotModel> eventArgs)
         {
-            Shot?.Invoke(this, eventArgs);
+            Shot?.Invoke(this, new EventArgs<IShotModel>(eventArgs.Value));;
         }
 
         private void OnDestroyControllerFinished(object sender, EventArgs e)

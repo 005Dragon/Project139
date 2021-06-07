@@ -27,7 +27,7 @@ namespace BattleCore.Actions
             SelfShip.SimpleShot(ZoneField, Damage);
         }
 
-        private void OnSelfShipShot(object sender, EventArgs<ShotModel> eventArgs)
+        private void OnSelfShipShot(object sender, EventArgs<IShotModel> eventArgs)
         {
             if (eventArgs.Value.Target.TryGetShip(out IBattleShip targetShip))
             {

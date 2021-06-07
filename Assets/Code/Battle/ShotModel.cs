@@ -1,6 +1,8 @@
-﻿namespace BattleCore
+﻿﻿using BattleCore;
+
+ namespace Code.Battle
 {
-    public class ShotModel
+    public class ShotModel : IShotModel
     {
         public enum SpeedType
         {
