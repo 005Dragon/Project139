@@ -6,10 +6,12 @@ namespace BattleCore.Log
     {
         void LogMessage(BattleLoggerMessageType messageType, string message);
 
-        void LogPlayerMessage(BattleLoggerMessageType messageType, PlayerSide playerSide, string message);
+        void LogShipParameters(IBattleShip ship, IBattleZone zone, string message);
 
-        void LogShipMessage(BattleLoggerMessageType messageType, IBattleShip ship, string message);
+        void LogAction(BattleAction battleAction, string message);
         
-        void LogActionMessage(BattleLoggerMessageType messageType, BattleAction battleAction, string message);
+        void LogStep(int stepIndex, string message);
+
+        void LogWinner(PlayerSide playerSide, string message);
     }
 }

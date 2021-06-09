@@ -10,7 +10,7 @@ namespace BattleCore.Actions
 
         protected override void PlayCore()
         {
-            Logger.LogActionMessage(BattleLoggerMessageType.Info, this, string.Empty);
+            Logger.LogAction(this, string.Empty);
             
             Finish();
         }

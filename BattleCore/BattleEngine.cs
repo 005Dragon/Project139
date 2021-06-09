@@ -8,6 +8,8 @@ namespace BattleCore
 {
     public class BattleEngine
     {
+        public bool Finished { get; private set; } = true;
+        
         private readonly IBattlePlayer[] _players;
         private readonly IBattleShip[] _ships;
         private readonly IBattleZone _battleZone;
@@ -59,14 +61,35 @@ namespace BattleCore
             _logger.LogMessage(BattleLoggerMessageType.Info, "Battle initialized.");
         }
 
-        public void Play()
+        public bool Play()
         {
-            _logger.LogMessage(BattleLoggerMessageType.Info, "Battle play.");
+            if (!Finished)
+            {
+                return false;
+            }
+
+            Finished = false;
+            
+            if (_ships.Any(x => x.Destroyed))
+            {
+                return false;
+            }
+            
+            _stepIndex++;
+            
+            _logger.LogStep(_stepIndex, string.Empty);
+            
+            foreach (IBattleShip ship in _ships)
+            {
+                _logger.LogShipParameters(ship, _battleZone, string.Empty);
+            }
             
             foreach (IBattlePlayer battlePlayer in _players)
             {
                 battlePlayer.Wake();
-            }            
+            }
+
+            return true;
         }
 
         private void OnCreateBattleAction(object sender, EventArgs<IBattleActionCreator> eventArgs)
@@ -109,27 +132,20 @@ namespace BattleCore
             
             actionQueue.Enqueue(battleAction);
             
-            _logger.LogActionMessage(BattleLoggerMessageType.Info, battleAction, "Created.");
+            _logger.LogAction(battleAction, "Created.");
         }
 
         private void OnPlayerReady(object sender, EventArgs eventArgs)
         {
-            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ((IBattlePlayer)sender).PlayerSide, "Ready.");
+            _logger.LogMessage(BattleLoggerMessageType.Info, $"{((IBattlePlayer)sender).PlayerSide} ready.");
             
             bool allPlayersReady = _players.All(x => x.IsReady);
 
             if (allPlayersReady)
             {
-                foreach (IBattleShip ship in _ships)
-                {
-                    _logger.LogShipMessage(BattleLoggerMessageType.Info, ship, string.Empty);
-                }
-                
-                _stepIndex++;
-            
-                _logger.LogMessage(BattleLoggerMessageType.Info, $"Start {_stepIndex} step.");
-                
-                if (TryGetNextStep(out BattleStep step))
+                bool gotNextStep = TryGetNextStep(out BattleStep step);
+
+                if (gotNextStep)
                 {
                     PlayStep(step);
                 }
@@ -177,33 +193,37 @@ namespace BattleCore
                 battlePlayer.Sleep();
             }
             
-            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ship.PlayerSide, "Destroy.");
-            _logger.LogPlayerMessage(BattleLoggerMessageType.Info, ship.PlayerSide.GetAnother(), "Winner!");
+            _logger.LogWinner(ship.PlayerSide.GetAnother(), $"Step {_stepIndex}.");
         }
 
         private void FinishStep()
         {
-            _logger.LogMessage(BattleLoggerMessageType.Info, $"Step {_stepIndex} finished.");
-            
             foreach (IBattleShip ship in _ships)
             {
+                if (ship.Destroyed)
+                {
+                    return;
+                }
+                
                 ship.SetEnergy(ship.MaxEnergy);
             }
-            
-            foreach (IBattlePlayer player in _players)
-            {
-                player.Wake();
-            }
+
+            Finished = true;
         }
 
         private bool TryGetNextStep(out BattleStep step)
         {
+            step = default;
+            
+            if (_ships.Any(x => x.Destroyed))
+            {
+                return false;
+            }
+            
             BattleAction[] actions = _battleActionQueues.Select(x => x.Dequeue()).Where(x => x != null).ToArray();
 
             if (actions.Length == 0)
             {
-                step = default;
-                
                 return false;
             }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BattleCore.Utils;
 
-namespace BattleCore.Players
+namespace BattleCore.Players.AI
 {
     public class RandomBattlePlayer : IBattlePlayer
     {

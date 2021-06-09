@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using BattleCore;
+using BattleCore.Log;
 using BattleCore.Utils;
 using Code.Services;
 using UnityEngine;
@@ -23,7 +24,10 @@ namespace Code.Battle.UI
             Initialize();
             
             Build();
-            
+        }
+
+        private void Update()
+        {
             _battleEngine.Play();
         }
 
@@ -44,6 +48,14 @@ namespace Code.Battle.UI
                 ship.HealthChange += OnShipHealthChange;
                 ship.EnergyChange += OnShipEnergyChange;
             }
+
+            IBattleLogger battleLogger = new BattleLogger(
+                BattleLogger.LogGroup.Common |
+                BattleLogger.LogGroup.Result |
+                //BattleLogger.LogGroup.ShipParameters |
+                BattleLogger.LogGroup.Actions |
+                BattleLogger.LogGroup.Step
+            );
             
             _battleEngine = new BattleEngine(
                 CreatePlayers().ToArray(),
@@ -51,7 +63,7 @@ namespace Code.Battle.UI
                 Service.BattleZone,
                 _battleActionLineUiController.BattleActionQueues,
                 Service.BattleActionCreatorService.GetBattleActionCreators().ToArray(),
-                new BattleLogger()
+                battleLogger
             );
             
             _battleEngine.Initialize();

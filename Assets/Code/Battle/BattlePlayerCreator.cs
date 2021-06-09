@@ -2,6 +2,7 @@
 using System.Linq;
 using BattleCore;
 using BattleCore.Players;
+using BattleCore.Players.AI;
 using BattleCore.UI;
 
 namespace Code.Battle
@@ -35,8 +36,14 @@ namespace Code.Battle
                 case PlayerManagementType.None: return CreateDefaultBattlePlayer(playerSide);
                 case PlayerManagementType.RandomAi: return CreateRandomBattlePlayer(playerSide);
                 case PlayerManagementType.Manual: return CreateManualBattlePlayer(playerSide);
+                case PlayerManagementType.HunterAi: return CreateHunterBattlePlayer(playerSide);
                 default: throw new ArgumentOutOfRangeException(nameof(playerManagementType), playerManagementType, null);
             }
+        }
+
+        private IBattlePlayer CreateHunterBattlePlayer(PlayerSide playerSide)
+        {
+            return new HunterBattlePlayer(playerSide, _random, _battleZone, _ships.First(x => x.PlayerSide == playerSide));
         }
 
         private IBattlePlayer CreateDefaultBattlePlayer(PlayerSide playerSide)

@@ -5,8 +5,7 @@ namespace BattleCore.Actions
 {
     public class MoveUpAction : BattleAction
     {
-        private IBattleZoneField _currentBattleZoneField;
-        private bool _battleZoneChanged;
+        private IBattleZoneField _lastBattleZoneField;
         
         public MoveUpAction(PlayerSide playerSide, IBattleActionCreator creator) : base(playerSide, creator)
         {
@@ -15,10 +14,10 @@ namespace BattleCore.Actions
         protected override void PlayCore()
         {
             SelfShip.ChangeBattleZoneFinished += OnSelfShipChangeBattleZoneFinished;
+
+            _lastBattleZoneField = BattleZone.GetShipBattleZoneField(PlayerSide);
             
-            _battleZoneChanged = SelfShip.TryChangeBattleZone(Direction4.Up, out IBattleZoneField resultBattleZoneField);
-            
-            _currentBattleZoneField = _battleZoneChanged ? resultBattleZoneField : BattleZone.GetShipBattleZoneField(PlayerSide);
+            SelfShip.TryChangeBattleZone(Direction4.Up, out _);
         }
 
         private void OnSelfShipChangeBattleZoneFinished(object sender, EventArgs eventArgs)
@@ -26,19 +25,15 @@ namespace BattleCore.Actions
             var ship = (IBattleShip) sender;
 
             ship.ChangeBattleZoneFinished -= OnSelfShipChangeBattleZoneFinished;
+
+            IBattleZoneField currentBattleZoneField = BattleZone.GetShipBattleZoneField(PlayerSide);
             
-            if (_battleZoneChanged)
+            if (currentBattleZoneField.Equals(_lastBattleZoneField))
             {
-                Logger.LogActionMessage(BattleLoggerMessageType.Info, this, $"New battle zone index - {_currentBattleZoneField.Index}.");
+                Logger.LogMessage(BattleLoggerMessageType.Warning, $"Failed to change the battle zone.");
             }
-            else
-            {
-                Logger.LogActionMessage(
-                    BattleLoggerMessageType.Warning,
-                    this,
-                    $"Failed to change the battle zone, current battle zone index - {_currentBattleZoneField.Index}."
-                );
-            }
+            
+            Logger.LogAction(this, $"battle zone index - {currentBattleZoneField.Index}");
             
             Finish();
         }

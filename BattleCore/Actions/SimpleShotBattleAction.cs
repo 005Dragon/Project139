@@ -44,7 +44,7 @@ namespace BattleCore.Actions
             ship.Shot -= OnSelfShipShot;
             ship.ShotFinished -= OnSelfShipShotFinished;
 
-            Logger.LogActionMessage(BattleLoggerMessageType.Info, this, _totalDamage + " damage.");
+            Logger.LogAction(this, _totalDamage + " damage.");
             
             Finish();
         }

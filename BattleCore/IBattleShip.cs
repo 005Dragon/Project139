@@ -21,6 +21,8 @@ namespace BattleCore
         float MaxEnergy { get; }
         
         float Energy { get; }
+        
+        bool Destroyed { get; }
 
         void SetEnergy(float value);
 

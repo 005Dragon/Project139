@@ -4,6 +4,7 @@
     {
         None,
         Manual,
-        RandomAi
+        RandomAi,
+        HunterAi
     }
 }

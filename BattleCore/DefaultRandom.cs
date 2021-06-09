@@ -6,9 +6,9 @@ namespace BattleCore
     {
         private readonly Random _random;
 
-        public DefaultRandom(Random random)
+        public DefaultRandom()
         {
-            _random = random;
+            _random = new Random();
         }
 
         public int Range(int minValue, int maxValue)

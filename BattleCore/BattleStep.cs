@@ -15,12 +15,17 @@ namespace BattleCore
 
             private int _finishedActionCount;
 
-            public BattleActionGroup(BattleAction[] actions)
+            private readonly IBattleZone _battleZone;
+            private readonly IBattleShip[] _ships;
+
+            public BattleActionGroup(BattleAction[] actions, IBattleZone battleZone, IBattleShip[] ships)
             {
                 _actions = actions;
+                _battleZone = battleZone;
+                _ships = ships;
             }
 
-            public void Play(IBattleShip[] shipControllers, IBattleZone battleZone)
+            public void Play()
             {
                 foreach (BattleAction battleAction in _actions)
                 {
@@ -33,10 +38,13 @@ namespace BattleCore
 
                     battleAction.Finished += OnBattleActionFinished;
                     
-                    battleAction.Play(shipControllers, battleZone);
+                    battleAction.Play(_ships, _battleZone);
                 }
-                
-                CheckFinished();
+
+                if (CheckFinished(_ships))
+                {
+                    Finished?.Invoke(this, EventArgs.Empty);
+                }
             }
 
             private void OnBattleActionFinished(object sender, EventArgs eventArgs)
@@ -47,38 +55,50 @@ namespace BattleCore
 
                 _finishedActionCount++;
                 
-                CheckFinished();
-            }
-
-            private void CheckFinished()
-            {
-                if (_finishedActionCount == _actions.Length)
+                if (CheckFinished(_ships))
                 {
                     Finished?.Invoke(this, EventArgs.Empty);
                 }
+            }
+
+            private bool CheckFinished(IBattleShip[] ships)
+            {
+                if (ships.Any(x => x.Destroyed))
+                {
+                    return true;
+                }
+                
+                if (_finishedActionCount == _actions.Length)
+                {
+                    return true;
+                }
+
+                return false;
             }
         }
         
         public event EventHandler Finished;
 
         private readonly int _index;
-
-        private readonly IBattleShip[] _shipControllers;
-        private readonly IBattleZone _battleZone;
         
         private readonly Queue<BattleActionGroup> _battleActionGroups = new Queue<BattleActionGroup>();
         
-        public BattleStep(int index, BattleAction[] actions, IBattleShip[] shipControllers, IBattleZone battleZone)
+        public BattleStep(int index, BattleAction[] actions, IBattleShip[] ships, IBattleZone battleZone)
         {
             _index = index;
 
-            _shipControllers = shipControllers;
-            _battleZone = battleZone;
+            _battleActionGroups.Enqueue(
+                new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Internal).ToArray(), battleZone, ships)
+            );
 
-            _battleActionGroups.Enqueue(new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Internal).ToArray()));
-            _battleActionGroups.Enqueue(new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Defense).ToArray()));
-            _battleActionGroups.Enqueue(new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Attack).ToArray()));
+            _battleActionGroups.Enqueue(
+                new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Defense).ToArray(), battleZone, ships)
+            );
 
+            _battleActionGroups.Enqueue(
+                new BattleActionGroup(actions.Where(x => x.ActionType == BattleActionType.Attack).ToArray(), battleZone, ships)
+            );
+            
             foreach (BattleActionGroup battleActionGroup in _battleActionGroups)
             {
                 battleActionGroup.Finished += OnBattleActionGroupFinished;
@@ -93,7 +113,7 @@ namespace BattleCore
 
             if (_battleActionGroups.Count > 0)
             {
-                _battleActionGroups.Dequeue().Play(_shipControllers, _battleZone);    
+                _battleActionGroups.Dequeue().Play();    
             }
             else
             {
@@ -105,7 +125,7 @@ namespace BattleCore
         {
             if (_battleActionGroups.Count > 0)
             {
-                _battleActionGroups.Dequeue().Play(_shipControllers, _battleZone);
+                _battleActionGroups.Dequeue().Play();
             }
             else
             {
