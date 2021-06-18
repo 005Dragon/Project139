@@ -28,7 +28,7 @@ namespace BattleCore.Players.AI
             _selfShip = selfShip;
         }
 
-        public void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreators)
+        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _battleActionCreators = battleActionCreators.ToArray();
         }

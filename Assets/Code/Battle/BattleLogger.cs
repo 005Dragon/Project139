@@ -62,11 +62,11 @@ namespace Code.Battle
             }
         }
 
-        public void LogStep(int stepIndex, string message)
+        public void LogRound(int stepIndex, string message)
         {
             if (_showLogFlags.HasFlag(LogGroup.Step))
             {
-                Debug.Log($"Step {stepIndex}. {message}");
+                Debug.Log($"Round {stepIndex}. {message}");
             }
         }
 

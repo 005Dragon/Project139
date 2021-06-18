@@ -5,6 +5,7 @@
         None,
         Manual,
         RandomAi,
-        HunterAi
+        HunterAi,
+        NeuronNetworkAi
     }
 }

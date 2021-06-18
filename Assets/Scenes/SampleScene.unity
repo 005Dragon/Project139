@@ -170,8 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 468db754e5d745f29f95ca1d7b92ecf3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionType: 2
   _energyCost: 1
+  _duration: 0.95
 --- !u!114 &5795800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -184,8 +184,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 115f9bdf3f304c9c8273f77f4cacad34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionType: 0
   _energyCost: 1
+  _duration: 1.01
   _damage: 5
 --- !u!114 &5795801
 MonoBehaviour:
@@ -199,8 +199,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 78e6da4fcf8d47209d7d0c8b86c2e0e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionType: 0
   _energyCost: 1
+  _duration: 1
   _damage: 3
 --- !u!114 &5795802
 MonoBehaviour:
@@ -214,8 +214,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ae6d725305bc452783021971895e05d4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionType: 1
   _energyCost: 1
+  _duration: 0.99
 --- !u!114 &5795803
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -228,8 +228,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: db2ea55e73174a4eaca952708915629f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _actionType: 1
   _energyCost: 1
+  _duration: 0.99
 --- !u!1 &18436080
 GameObject:
   m_ObjectHideFlags: 0
@@ -2035,8 +2035,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 333abc49b3d24830b3c37b8a1bc11b43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _leftPlayerManagementType: 1
-  _rightPlayerManagementType: 2
+  _leftPlayerManagementType: 2
+  _rightPlayerManagementType: 4
 --- !u!1 &922579443
 GameObject:
   m_ObjectHideFlags: 0
@@ -3859,7 +3859,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ver. 0.1.2.0 work in progress.
+  m_Text: Ver. 0.1.3.0 work in progress.
 --- !u!222 &1705000490
 CanvasRenderer:
   m_ObjectHideFlags: 0

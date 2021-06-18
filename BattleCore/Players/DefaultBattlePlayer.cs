@@ -18,7 +18,7 @@ namespace BattleCore.Players
             PlayerSide = playerSide;
         }
 
-        public void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreators)
+        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
         }
 

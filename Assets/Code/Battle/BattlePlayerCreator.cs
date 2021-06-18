@@ -4,6 +4,7 @@ using BattleCore;
 using BattleCore.Players;
 using BattleCore.Players.AI;
 using BattleCore.UI;
+using UnityEngine;
 
 namespace Code.Battle
 {
@@ -37,8 +38,18 @@ namespace Code.Battle
                 case PlayerManagementType.RandomAi: return CreateRandomBattlePlayer(playerSide);
                 case PlayerManagementType.Manual: return CreateManualBattlePlayer(playerSide);
                 case PlayerManagementType.HunterAi: return CreateHunterBattlePlayer(playerSide);
+                case PlayerManagementType.NeuronNetworkAi: return CreateNeuronNetworkBattlePlayer(playerSide);
                 default: throw new ArgumentOutOfRangeException(nameof(playerManagementType), playerManagementType, null);
             }
+        }
+
+        private IBattlePlayer CreateNeuronNetworkBattlePlayer(PlayerSide playerSide)
+        {
+            var result = new NeuronNetworkBattlePlayer(playerSide, _battleZone, _ships.First(x => x.PlayerSide == playerSide));
+            
+            Debug.Log(result);
+
+            return result;
         }
 
         private IBattlePlayer CreateHunterBattlePlayer(PlayerSide playerSide)

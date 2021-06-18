@@ -28,7 +28,7 @@ namespace Code.Battle.UI
 
         private void Update()
         {
-            _battleEngine.Play();
+            _battleEngine.PlayNextRound();
         }
 
         private void Initialize()
@@ -63,7 +63,8 @@ namespace Code.Battle.UI
                 Service.BattleZone,
                 _battleActionLineUiController.BattleActionQueues,
                 Service.BattleActionCreatorService.GetBattleActionCreators().ToArray(),
-                battleLogger
+                battleLogger,
+                new UnityRandom()
             );
             
             _battleEngine.Initialize();

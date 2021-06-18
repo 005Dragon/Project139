@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using BattleCore.Actions;
 using BattleCore.Utils;
@@ -29,7 +28,7 @@ namespace BattleCore.Players.AI
             PlayerSide = playerSide;
         }
 
-        public void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreators)
+        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _battleActionCreators = battleActionCreators.ToArray();
         }
@@ -45,7 +44,7 @@ namespace BattleCore.Players.AI
             
             while (_selfShip.Energy > 0)
             {
-                lastAction = GenerateBattleAction(lastAction);
+                GenerateBattleAction(ref lastAction);
             }
 
             IsReady = true;
@@ -53,7 +52,7 @@ namespace BattleCore.Players.AI
             Ready?.Invoke(this, EventArgs.Empty);
         }
         
-        private BattleActionId GenerateBattleAction(BattleActionId? lastAction)
+        private void GenerateBattleAction(ref BattleActionId? lastAction)
         {
             int oppositeDifference = GetOppositeDifference(lastAction);
             
@@ -77,7 +76,7 @@ namespace BattleCore.Players.AI
 
             CreateBattleAction?.Invoke(this, new EventArgs<IBattleActionCreator>(actionCreator));
 
-            return actionCreator.ActionId;
+            lastAction = actionCreator.ActionId;
         }
 
         private int GetOppositeDifference(BattleActionId? lastAction)

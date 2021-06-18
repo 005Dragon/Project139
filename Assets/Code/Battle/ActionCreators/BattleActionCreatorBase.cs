@@ -9,18 +9,21 @@ namespace Code.Battle.ActionCreators
     {
         public abstract BattleActionId ActionId { get; }
         
-        public IBattleLogger Logger { get; set; }
+        public abstract BattleActionType ActionType { get; }
         
-        public BattleActionType ActionType => _actionType;
+        public IBattleLogger Logger { get; set; }
         
         public float EnergyCost => _energyCost;
 
-        [SerializeField]
-        private BattleActionType _actionType; 
+        public float Duration => _duration;
         
         [SerializeField]
-        private float _energyCost;
+        protected float _energyCost;
+
+        [SerializeField]
+        protected float _duration;
 
         public abstract BattleAction Create(PlayerSide playerSide);
+        public abstract object Clone();
     }
 }

@@ -8,7 +8,7 @@ namespace BattleCore
 {
     public class BattleEngine
     {
-        public bool Finished { get; private set; } = true;
+        public int RoundLimit { get; set; } = 100;
         
         private readonly IBattlePlayer[] _players;
         private readonly IBattleShip[] _ships;
@@ -16,8 +16,10 @@ namespace BattleCore
         private readonly IBattleActionQueue[] _battleActionQueues;
         private readonly IBattleActionCreator[] _battleActionCreators;
         private readonly IBattleLogger _logger;
-
-        private int _stepIndex;
+        private readonly IRandom _random;
+        
+        private int _roundIndex;
+        private bool _roundAlreadyStarted;
 
         public BattleEngine(
             IBattlePlayer[] players, 
@@ -25,7 +27,8 @@ namespace BattleCore
             IBattleZone battleZone,
             IBattleActionQueue[] battleActionQueues,
             IBattleActionCreator[] battleActionCreators,
-            IBattleLogger logger)
+            IBattleLogger logger, 
+            IRandom random)
         {
             _players = players;
             _ships = ships;
@@ -33,6 +36,7 @@ namespace BattleCore
             _battleActionQueues = battleActionQueues;
             _battleActionCreators = battleActionCreators;
             _logger = logger;
+            _random = random;
         }
 
         public void Initialize()
@@ -50,7 +54,14 @@ namespace BattleCore
 
             foreach (IBattlePlayer battlePlayer in _players)
             {
-                battlePlayer.AddEnableBattleActionCreators(_battleActionCreators);
+                var playerBattleActionCreators = new IBattleActionCreator[_battleActionCreators.Length];
+
+                for (int i = 0; i < playerBattleActionCreators.Length; i++)
+                {
+                    playerBattleActionCreators[i] = (IBattleActionCreator) _battleActionCreators[i].Clone();
+                }
+                
+                battlePlayer.AddEnableBattleActionCreators(playerBattleActionCreators);
             }
 
             foreach (IBattleShip ship in _ships)
@@ -61,24 +72,29 @@ namespace BattleCore
             _logger.LogMessage(BattleLoggerMessageType.Info, "Battle initialized.");
         }
 
-        public bool Play()
+        public bool PlayNextRound()
         {
-            if (!Finished)
+            if (_roundAlreadyStarted)
             {
-                return false;
+                return true;
             }
 
-            Finished = false;
-            
-            if (_ships.Any(x => x.Destroyed))
+            if (_ships.Any(x => x.Destroyed) || _roundIndex > RoundLimit)
             {
                 return false;
             }
             
-            _stepIndex++;
+            _roundAlreadyStarted = true;
+
+            _roundIndex++;
             
-            _logger.LogStep(_stepIndex, string.Empty);
-            
+            _logger.LogRound(_roundIndex, "Initialized.");
+
+            foreach (IBattleShip ship in _ships)
+            {
+                ship.SetEnergy(ship.MaxEnergy);
+            }
+
             foreach (IBattleShip ship in _ships)
             {
                 _logger.LogShipParameters(ship, _battleZone, string.Empty);
@@ -88,7 +104,7 @@ namespace BattleCore
             {
                 battlePlayer.Wake();
             }
-
+            
             return true;
         }
 
@@ -143,45 +159,29 @@ namespace BattleCore
 
             if (allPlayersReady)
             {
-                bool gotNextStep = TryGetNextStep(out BattleStep step);
+                var round = new BattleRound(
+                    _roundIndex,
+                    _battleActionQueues,
+                    _ships,
+                    _battleZone,
+                    _logger,
+                    _random
+                );
 
-                if (gotNextStep)
-                {
-                    PlayStep(step);
-                }
-                else
-                {
-                    FinishStep();
-                }
-            }
-        }
-
-        private void PlayStep(BattleStep step)
-        {
-            foreach (IBattlePlayer player in _players)
-            {
-                player.Sleep();
-            }
-
-            step.Finished += OnStepFinished;
+                round.Finished += OnRoundFinished;
             
-            step.Play();
+                round.Play();
+            }
         }
 
-        private void OnStepFinished(object sender, EventArgs eventArgs)
+        private void OnRoundFinished(object sender, EventArgs eventArgs)
         {
-            var step = (BattleStep) sender;
-
-            step.Finished -= OnStepFinished;
-
-            if (TryGetNextStep(out var nextStep))
+            foreach (IBattlePlayer battlePlayer in _players)
             {
-                PlayStep(nextStep);
+                battlePlayer.Sleep();
             }
-            else
-            {
-                FinishStep();
-            }
+
+            _roundAlreadyStarted = false;
         }
         
         private void OnShipDestroy(object sender, EventArgs eventArgs)
@@ -193,43 +193,7 @@ namespace BattleCore
                 battlePlayer.Sleep();
             }
             
-            _logger.LogWinner(ship.PlayerSide.GetAnother(), $"Step {_stepIndex}.");
-        }
-
-        private void FinishStep()
-        {
-            foreach (IBattleShip ship in _ships)
-            {
-                if (ship.Destroyed)
-                {
-                    return;
-                }
-                
-                ship.SetEnergy(ship.MaxEnergy);
-            }
-
-            Finished = true;
-        }
-
-        private bool TryGetNextStep(out BattleStep step)
-        {
-            step = default;
-            
-            if (_ships.Any(x => x.Destroyed))
-            {
-                return false;
-            }
-            
-            BattleAction[] actions = _battleActionQueues.Select(x => x.Dequeue()).Where(x => x != null).ToArray();
-
-            if (actions.Length == 0)
-            {
-                return false;
-            }
-
-            step = new BattleStep(_stepIndex, actions, _ships, _battleZone);
-
-            return true;
+            _logger.LogWinner(ship.PlayerSide.GetAnother(), $"Step {_roundIndex}.");
         }
     }
 }

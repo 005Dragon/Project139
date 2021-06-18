@@ -13,7 +13,7 @@ namespace BattleCore
         event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         event EventHandler Ready;
 
-        void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreators);
+        void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators);
         
         void Sleep();
 

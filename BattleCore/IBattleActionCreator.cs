@@ -1,9 +1,10 @@
-﻿using BattleCore.Actions;
+﻿using System;
+using BattleCore.Actions;
 using BattleCore.Log;
 
 namespace BattleCore
 {
-    public interface IBattleActionCreator
+    public interface IBattleActionCreator : ICloneable
     {
         BattleActionId ActionId { get; }
         
@@ -12,6 +13,8 @@ namespace BattleCore
         IBattleLogger Logger { get; set; }
         
         float EnergyCost { get; }
+        
+        float Duration { get; }
         
         BattleAction Create(PlayerSide playerSide);
     }

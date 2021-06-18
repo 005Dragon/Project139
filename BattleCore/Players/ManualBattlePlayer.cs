@@ -26,7 +26,7 @@ namespace BattleCore.Players
             playerReady.Ready += OnPlayerReady;
         }
 
-        public void AddEnableBattleActionCreators(IEnumerable<IBattleActionCreator> battleActionCreators)
+        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _battleActionBar.AddEnableBattleActionCreators(PlayerSide, battleActionCreators);
 

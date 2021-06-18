@@ -17,6 +17,8 @@ namespace BattleCore.Actions
         
         public float EnergyCost { get; }
         
+        public float Duration { get; set; }
+        
         protected IBattleLogger Logger { get; }
 
         protected IBattleShip SelfShip { get; private set; }
@@ -31,6 +33,7 @@ namespace BattleCore.Actions
             EnergyCost = creator.EnergyCost;
             Logger = creator.Logger;
             Id = creator.ActionId;
+            Duration = creator.Duration;
         }
 
         public void Play(IBattleShip[] shipControllers, IBattleZone battleZone)

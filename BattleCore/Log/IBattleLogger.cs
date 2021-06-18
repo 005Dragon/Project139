@@ -10,7 +10,7 @@ namespace BattleCore.Log
 
         void LogAction(BattleAction battleAction, string message);
         
-        void LogStep(int stepIndex, string message);
+        void LogRound(int stepIndex, string message);
 
         void LogWinner(PlayerSide playerSide, string message);
     }

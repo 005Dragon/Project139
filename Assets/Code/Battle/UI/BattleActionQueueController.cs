@@ -25,6 +25,8 @@ namespace Code.Battle.UI
 
         public PlayerSide PlayerSide => _playerSide;
 
+        public bool IsEmpty => _queueItems.Count == 0;
+
         public float CellSize;
         public float Gap;
 
@@ -77,7 +79,12 @@ namespace Code.Battle.UI
 
             return pair.Action;
         }
-        
+
+        public void Clear()
+        {
+            _queueItems.Clear();
+        }
+
         private void Update()
         {
             if (!_allSleep)
