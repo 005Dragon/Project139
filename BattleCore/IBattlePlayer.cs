@@ -11,7 +11,7 @@ namespace BattleCore
         bool IsReady { get; }
 
         event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
-        event EventHandler Ready;
+        event EventHandler<EventArgs<bool>> ReadyChange;
 
         void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators);
         

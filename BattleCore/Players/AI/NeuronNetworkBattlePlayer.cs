@@ -11,14 +11,10 @@ using Platform.NeuronsNetworks.NeuronLayers.Neurons;
 
 namespace BattleCore.Players.AI
 {
-    public class NeuronNetworkBattlePlayer : IBattlePlayer
+    public class NeuronNetworkBattlePlayer : BattlePlayerBase
     {
-        public event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
-        public event EventHandler Ready;
+        public override event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         
-        public PlayerSide PlayerSide { get; }
-        public bool IsReady { get; private set; }
-
         private static string DefaultNeuronNetworkNameFormat = "{0}NeuronNetwork.dat";
         
         private MutationNeuronNetwork _neuronNetwork;
@@ -33,16 +29,16 @@ namespace BattleCore.Players.AI
             IBattleZone battleZone,
             IBattleShip selfShip,
             MutationNeuronNetwork neuronNetwork = null)
+            : base(playerSide)
         {
             _battleZone = battleZone;
-            PlayerSide = playerSide;
 
             _selfShip = selfShip;
 
             _neuronNetwork = neuronNetwork;
         }
 
-        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
+        public override void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _idToBattleActionCreatorIndex = CreateBattleActionCreatorIndex(battleActionCreators);
 
@@ -52,12 +48,7 @@ namespace BattleCore.Players.AI
             }
         }
 
-        public void Sleep()
-        {
-            IsReady = false;
-        }
-
-        public void Wake()
+        public override void Wake()
         {
             int? lastAction = null;
             
@@ -67,8 +58,6 @@ namespace BattleCore.Players.AI
             }
 
             IsReady = true;
-            
-            Ready?.Invoke(this, EventArgs.Empty);
         }
         
         private MutationNeuronNetwork CreateNeuronNetwork()

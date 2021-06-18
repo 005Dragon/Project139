@@ -5,15 +5,10 @@ using BattleCore.Utils;
 
 namespace BattleCore.Players.AI
 {
-    public class RandomBattlePlayer : IBattlePlayer
+    public class RandomBattlePlayer : BattlePlayerBase
     {
-        public event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
-        public event EventHandler Ready;
+        public override event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         
-        public PlayerSide PlayerSide { get; }
-        
-        public bool IsReady { get; private set; }
-
         private IBattleActionCreator[] _battleActionCreators;
 
         private readonly IRandom _random;
@@ -21,24 +16,19 @@ namespace BattleCore.Players.AI
         private readonly IBattleShip _selfShip;
 
         public RandomBattlePlayer(PlayerSide playerSide, IRandom random, IBattleZone battleZone, IBattleShip selfShip)
+            : base(playerSide)
         {
-            PlayerSide = playerSide;
             _random = random;
             _battleZone = battleZone;
             _selfShip = selfShip;
         }
 
-        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
+        public override void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _battleActionCreators = battleActionCreators.ToArray();
         }
 
-        public void Sleep()
-        {
-            IsReady = false;
-        }
-
-        public void Wake()
+        public override void Wake()
         {
             while (_selfShip.Energy > 0)
             {
@@ -46,8 +36,6 @@ namespace BattleCore.Players.AI
             }
 
             IsReady = true;
-            
-            Ready?.Invoke(this, EventArgs.Empty);
         }
         
         private void GenerateBattleAction()

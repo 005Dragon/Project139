@@ -1,37 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
 using BattleCore.Utils;
 
 namespace BattleCore.Players
 {
-    public class DefaultBattlePlayer : IBattlePlayer
+    public class DefaultBattlePlayer : BattlePlayerBase
     {
-        public event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
-        public event EventHandler Ready;
+        public override event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         
-        public PlayerSide PlayerSide { get; }
-
-        public bool IsReady { get; private set; }
-
-        public DefaultBattlePlayer(PlayerSide playerSide)
-        {
-            PlayerSide = playerSide;
-        }
-
-        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
+        public DefaultBattlePlayer(PlayerSide playerSide) : base(playerSide)
         {
         }
 
-        public void Sleep()
+        public override void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
-            IsReady = false;
         }
 
-        public void Wake()
+        public override void Wake()
         {
             IsReady = true;
-            
-            Ready?.Invoke(this, EventArgs.Empty);
         }
     }
 }

@@ -1,46 +1,40 @@
 ﻿using System;
-using System.Collections.Generic;
 using BattleCore.UI;
 using BattleCore.Utils;
 
 namespace BattleCore.Players
 {
-    public class ManualBattlePlayer : IBattlePlayer
+    public class ManualBattlePlayer : BattlePlayerBase
     {
-        public event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
-        public event EventHandler Ready;
+        public override event EventHandler<EventArgs<IBattleActionCreator>> CreateBattleAction;
         
-        public PlayerSide PlayerSide { get; }
-        
-        public bool IsReady { get; private set; }
-
         private readonly IUiBattleActionBar _battleActionBar;
 
         private bool _sleep;
 
         public ManualBattlePlayer(PlayerSide playerSide, IUiBattleActionBar battleActionBar, IUiPlayerReady playerReady)
+            : base(playerSide)
         {
-            PlayerSide = playerSide;
             _battleActionBar = battleActionBar;
-
             playerReady.Ready += OnPlayerReady;
         }
 
-        public void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
+        public override void AddEnableBattleActionCreators(IBattleActionCreator[] battleActionCreators)
         {
             _battleActionBar.AddEnableBattleActionCreators(PlayerSide, battleActionCreators);
 
             _battleActionBar.CreateBattleAction += OnBattleActionBarCreateBattleAction;
         }
 
-        public void Sleep()
+        public override void Sleep()
         {
+            base.Sleep();
+            
             _sleep = true;
-            IsReady = false;
             _battleActionBar.Visible = false;
         }
 
-        public void Wake()
+        public override void Wake()
         {
             _sleep = false;
             _battleActionBar.Visible = true;
@@ -56,8 +50,6 @@ namespace BattleCore.Players
             if (!_sleep)
             {
                 IsReady = true;
-                
-                Ready?.Invoke(this, EventArgs.Empty);
             }
         }
     }

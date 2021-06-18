@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using BattleCore;
 using BattleCore.Actions;
+using BattleCore.Utils;
 using Code.Services;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +12,8 @@ namespace Code.Battle.UI
 {
     public class BattleActionQueueController : MonoBehaviour, IBattleActionQueue
     {
+        public event EventHandler<EventArgs<BattleAction>> ActivateAction; 
+        
         private class BattleActionQueueItemPair
         {
             public BattleAction Action;
@@ -50,7 +54,9 @@ namespace Code.Battle.UI
         private GameObject _queueItemTemplate;
         
         private readonly Queue<BattleActionQueueItemPair> _queueItems = new Queue<BattleActionQueueItemPair>();
-
+        
+        private BattleActionQueueItemPair _activeQueueItem;
+        
         private bool _allSleep = true;
         
         public void Enqueue(BattleAction action)
@@ -71,19 +77,31 @@ namespace Code.Battle.UI
                 return null;
             }
             
-            BattleActionQueueItemPair pair = _queueItems.Dequeue();
+            _activeQueueItem = _queueItems.Dequeue();
+            _activeQueueItem.Action.Finished += OnBattleActionFinished;
 
-            Destroy(pair.QueueItemTransform.gameObject);
-            
             _allSleep = false;
-
-            return pair.Action;
+            
+            ActivateAction?.Invoke(this, new EventArgs<BattleAction>(_activeQueueItem.Action));
+            
+            return _activeQueueItem.Action;
         }
-
+        
         public void Clear()
         {
             _queueItems.Clear();
         }
+
+        private void OnBattleActionFinished(object sender, EventArgs eventArgs)
+        {
+            Destroy(_activeQueueItem.QueueItemTransform.gameObject);
+
+            _activeQueueItem = null;
+            
+            _allSleep = false;
+        }
+
+        
 
         private void Update()
         {
@@ -92,16 +110,31 @@ namespace Code.Battle.UI
                 _allSleep = true;
                 
                 int index = 0;
+
+                if (_activeQueueItem != null)
+                {
+                    UpdateQueueItem(_activeQueueItem, ref index);
+                }
+                else
+                {
+                    index++;
+                }
+                
                 foreach (BattleActionQueueItemPair item in _queueItems)
                 {
-                    bool needMove = GetNeedMoveQueueItem(item.QueueItemTransform, index++, out Vector2 targetPosition);
-
-                    if (needMove)
-                    {
-                        MoveQueueItem(item.QueueItemTransform, targetPosition);
-                        _allSleep = false;
-                    }
+                    UpdateQueueItem(item, ref index);
                 }
+            }
+        }
+
+        private void UpdateQueueItem(BattleActionQueueItemPair item, ref int index)
+        {
+            bool needMove = GetNeedMoveQueueItem(item.QueueItemTransform, index++, out Vector2 targetPosition);
+
+            if (needMove)
+            {
+                MoveQueueItem(item.QueueItemTransform, targetPosition);
+                _allSleep = false;
             }
         }
 

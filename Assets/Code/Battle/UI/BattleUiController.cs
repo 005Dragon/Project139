@@ -56,18 +56,35 @@ namespace Code.Battle.UI
                 BattleLogger.LogGroup.Actions |
                 BattleLogger.LogGroup.Step
             );
+
+            IBattlePlayer[] players = CreatePlayers().ToArray();
+
+            foreach (IBattlePlayer player in players)
+            {
+                player.ReadyChange += OnBattlePlayerReadyChange;
+            }
             
             _battleEngine = new BattleEngine(
-                CreatePlayers().ToArray(),
+                players,
                 Service.BattleShipsService.GetBattleShips().ToArray(),
                 Service.BattleZone,
-                _battleActionLineUiController.BattleActionQueues,
+                _battleActionLineUiController.BottomBarControllers.Select(x => (IBattleActionQueue)x.BattleActionQueue).ToArray(),
                 Service.BattleActionCreatorService.GetBattleActionCreators().ToArray(),
                 battleLogger,
                 new UnityRandom()
             );
             
             _battleEngine.Initialize();
+        }
+
+        private void OnBattlePlayerReadyChange(object sender, EventArgs<bool> eventArgs)
+        {
+            var player = (IBattlePlayer) sender;
+
+            BattleBottomBarController battleBottomBarController = 
+                _battleActionLineUiController.BottomBarControllers.First(x => x.BattleActionQueue.PlayerSide == player.PlayerSide);
+            
+            battleBottomBarController.SetReady(eventArgs.Value);
         }
 
         private void Build()

@@ -22,7 +22,7 @@ namespace BattleCore
         private bool _roundAlreadyStarted;
 
         public BattleEngine(
-            IBattlePlayer[] players, 
+            IBattlePlayer[] players,
             IBattleShip[] ships,
             IBattleZone battleZone,
             IBattleActionQueue[] battleActionQueues,
@@ -44,7 +44,7 @@ namespace BattleCore
             foreach (IBattlePlayer player in _players)
             {
                 player.CreateBattleAction += OnCreateBattleAction;
-                player.Ready += OnPlayerReady;
+                player.ReadyChange += OnPlayerReadyChange;
             }
 
             foreach (IBattleActionCreator battleActionCreator in _battleActionCreators)
@@ -151,8 +151,13 @@ namespace BattleCore
             _logger.LogAction(battleAction, "Created.");
         }
 
-        private void OnPlayerReady(object sender, EventArgs eventArgs)
+        private void OnPlayerReadyChange(object sender, EventArgs<bool> eventArgs)
         {
+            if (!eventArgs.Value)
+            {
+                return;
+            }
+            
             _logger.LogMessage(BattleLoggerMessageType.Info, $"{((IBattlePlayer)sender).PlayerSide} ready.");
             
             bool allPlayersReady = _players.All(x => x.IsReady);
