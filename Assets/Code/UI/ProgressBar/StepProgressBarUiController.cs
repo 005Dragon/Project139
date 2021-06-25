@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Code.UI.ProgressBar
 {
-    public class ProgressBarController : MonoBehaviour
+    public class StepProgressBarUiController : MonoBehaviour
     {
         public Color BackgroundColor;
         
@@ -20,7 +20,7 @@ namespace Code.UI.ProgressBar
         [SerializeField]
         private GameObject _endCellTemplate;
         
-        private readonly List<ProgressBarCellController> _barCells = new List<ProgressBarCellController>();
+        private readonly List<StepProgressBarCellUiController> _barCells = new List<StepProgressBarCellUiController>();
 
         public void SetValue(float value)
         {
@@ -34,18 +34,18 @@ namespace Code.UI.ProgressBar
         
         public void Build(float maxValue)
         {
-            _barCells.Add(Instantiate(_startCellTemplate, transform).GetComponent<ProgressBarCellController>());
+            _barCells.Add(Instantiate(_startCellTemplate, transform).GetComponent<StepProgressBarCellUiController>());
 
             for (int i = 0; i < maxValue - 2; i++)
             {
-                _barCells.Add(Instantiate(_cellTemlate,transform).GetComponent<ProgressBarCellController>());
+                _barCells.Add(Instantiate(_cellTemlate,transform).GetComponent<StepProgressBarCellUiController>());
             }
             
-            _barCells.Add(Instantiate(_endCellTemplate, transform).GetComponent<ProgressBarCellController>());
+            _barCells.Add(Instantiate(_endCellTemplate, transform).GetComponent<StepProgressBarCellUiController>());
 
             float offset = 0;
 
-            foreach (ProgressBarCellController cellController in _barCells)
+            foreach (StepProgressBarCellUiController cellController in _barCells)
             {
                 cellController.BackgroundColor = BackgroundColor;
                 cellController.ActiveColor = ActiveColor;

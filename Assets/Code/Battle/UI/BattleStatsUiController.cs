@@ -25,7 +25,8 @@ namespace Code.Battle.UI
             {
                 IBattleShip ship = ships.First(x => x.PlayerSide == statsBarController.PlayerSide);
                 
-                statsBarController.Build(ship.MaxHealth, ship.MaxEnergy);
+                statsBarController.SetHealth(ship.Health, ship.MaxHealth);
+                statsBarController.SetEnergy(ship.Energy, ship.MaxEnergy);
             }
         }
 

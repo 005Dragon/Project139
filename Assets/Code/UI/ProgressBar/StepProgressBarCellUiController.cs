@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 namespace Code.UI.ProgressBar
 {
-    public class ProgressBarCellController : MonoBehaviour
+    public class StepProgressBarCellUiController : MonoBehaviour
     {
         public bool IsActive { get; private set; }
         
